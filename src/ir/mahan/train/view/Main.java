@@ -9,10 +9,8 @@ public class Main {
 			@Override
 			public void run() {
 
-				new MainFrame("myApp");
+				new MainFrame("User Form");
 			}
 		});
-
 	}
-
 }
