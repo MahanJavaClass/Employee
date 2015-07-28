@@ -6,22 +6,18 @@ import ir.mahan.train.model.IuserListener;
 import ir.mahan.train.model.Sport;
 import ir.mahan.train.model.User;
 import ir.mahan.train.model.Validate;
-
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -51,7 +47,7 @@ public class FormPanel extends JPanel implements ActionListener {
 
 	JComboBox<Role> roleCB;
 	JComboBox<Gender> genderCB;
-
+//comment
 	JList favoriteSportList;
 
 	JCheckBox city01;

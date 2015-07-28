@@ -25,7 +25,7 @@ public class TextPanel extends JPanel {
 		setBorder(BorderFactory.createTitledBorder("TextArea"));
 		add(new JScrollPane(textArea), BorderLayout.CENTER);
 	}
-
+//comment
 	public void setTextArea(User user) {
 		String name = user.getName();
 		String family = user.getFamily();
