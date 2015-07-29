@@ -28,8 +28,8 @@ public class Person implements Serializable{
 		this.name = name;
 	}
 
-	public Person(String name, String family, Gender gender, String city,
-			Role role, String age, String favoriteSport, String salary
+	public Person(String name, String family, Role role, String city,
+			Gender gender, String age, String favoriteSport, String salary
 			) {
 		super();
 		this.name = name;
@@ -42,6 +42,7 @@ public class Person implements Serializable{
 		this.salary = salary;
 	
 	}
+
 
 	public String getFamily() {
 		return family;

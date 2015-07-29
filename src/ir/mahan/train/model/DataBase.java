@@ -19,8 +19,8 @@ public class DataBase {
 		
 	}
 
-	private void add() {
-
+	private void addPerson(Person p) {
+		people.add(p);
 	}
 
 	private void deletePerson(int index) {

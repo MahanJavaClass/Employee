@@ -58,12 +58,11 @@ public class FormPanel extends JPanel implements ActionListener {
 
 	JButton submitBtn;
 
-	private FormListener iuser;
+	private FormListener iformListener;
 
-	public void setIuser(FormListener iuser) {
-		this.iuser = iuser;
+	public void setIformListener(FormListener iformListener) {
+		this.iformListener = iformListener;
 	}
-	//comment by sedighe
 
 	public FormPanel() {
 		Dimension dim = getPreferredSize();
@@ -288,19 +287,23 @@ public class FormPanel extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(null, error, "خطا",
 					JOptionPane.ERROR_MESSAGE);
 		else {
-
-			iuser.formEventOccured(makeUser());
+			
+			FormEvent e = new FormEvent(nameTxt.getText(), familyTxt.getText(),
+					(Role) roleCB.getSelectedItem(), getSelectedCities(),
+					(Gender) genderCB.getSelectedItem(), getSelectedAge(),
+					favoriteSportList.getSelectedValue().toString(), isEmp.isSelected(), salaryTxt.getText());
+			iformListener.formEventOccured(e);
 		}
 
 	}
 
-	public FormEvent makeUser() {
-		FormEvent user = new FormEvent(nameTxt.getText(), familyTxt.getText(),
-				(Role) roleCB.getSelectedItem(), getSelectedCities(),
-				(Gender) genderCB.getSelectedItem(), getSelectedAge(),
-				favoriteSportList.getSelectedValue().toString(), isEmp.isSelected(), salaryTxt.getText());
-		return user;
-	}
+//	public FormEvent makeUser() {
+//		FormEvent user = new FormEvent(nameTxt.getText(), familyTxt.getText(),
+//				(Role) roleCB.getSelectedItem(), getSelectedCities(),
+//				(Gender) genderCB.getSelectedItem(), getSelectedAge(),
+//				favoriteSportList.getSelectedValue().toString(), isEmp.isSelected(), salaryTxt.getText());
+//		return user;
+//	}
 
 //	private String getSelectedSports() {
 //		// TODO Auto-generated method stub

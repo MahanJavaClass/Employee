@@ -1,9 +1,11 @@
 package ir.mahan.train.view;
 
 import ir.mahan.train.Controller.Controller;
-import ir.mahan.train.model.FileStream;
+import ir.mahan.train.model.DataBase;
+//import ir.mahan.train.model.FileStream;
 import ir.mahan.train.model.Ifile;
 import ir.mahan.train.model.FormListener;
+import ir.mahan.train.model.Person;
 
 import java.awt.BorderLayout;
 import java.awt.Window;
@@ -34,18 +36,17 @@ import javax.swing.KeyStroke;
 
 import org.omg.CORBA.portable.OutputStream;
 
-
-
 public class MainFrame extends JFrame {
 
 	TextPanel textPanel;
 	FormPanel formPanel;
 	// private JFileChooser fileChooser;
 	private Ifile ifile;
-	FileStream fileStream;
+	// FileStream fileStream;
 	JSplitPane splitPane;
 	JTabbedPane tabbedPane;
 	Controller controller;
+	JFileChooser fileChooser;
 
 	// User user;
 
@@ -78,14 +79,19 @@ public class MainFrame extends JFrame {
 		tabbedPane.add("Text Area", textPanel);
 		splitPane.setOneTouchExpandable(true);
 		createMenu();
-		// this.getContentPane().add(textPanel, BorderLayout.EAST);
-		// this.getContentPane().add(formPanel, BorderLayout.WEST);
 		this.getContentPane().add(splitPane, BorderLayout.CENTER);
-		formPanel.setIuser(new FormListener() {
+		formPanel.setIformListener(new FormListener() {
 
 			@Override
 			public void formEventOccured(FormEvent e) {
-				controller.addPerson(e);
+			
+				try {
+					controller = new Controller();
+					controller.addPerson(e);
+				} catch (IOException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 				String output = e.toString();
 				textPanel.setTextArea(output);
 			}
@@ -145,21 +151,20 @@ public class MainFrame extends JFrame {
 
 		exportToFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				ActionEvent.CTRL_MASK));
-		fileStream = new FileStream();
+		
+		fileChooser = new JFileChooser();
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.addChoosableFileFilter(new userFileFilter());
+		
+		// fileStream = new FileStream();
 		loadFileMenuItem.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				if (fileStream.getFileChooser().showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+				if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
 
-					try {
-
-						textPanel.setTextArea(fileStream.readFromFile());
-
-					} catch (Exception e) {
-
-						e.printStackTrace();
-					}
+					// textPanel.setTextArea(fileStream.readFromFile());
+					
 				}
 			}
 		});
@@ -169,11 +174,10 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
-				if (fileStream.getFileChooser().showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
-
+				if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
 					try {
-
-						fileStream.writeToFile(formPanel.makeUser());
+						controller.SaveToFile(selectedFile);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
