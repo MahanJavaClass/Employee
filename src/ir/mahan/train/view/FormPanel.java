@@ -1,9 +1,7 @@
 package ir.mahan.train.view;
 
-import ir.mahan.train.model.Ifile;
 import ir.mahan.train.model.Role;
 import ir.mahan.train.model.Gender;
-import ir.mahan.train.model.FormListener;
 import ir.mahan.train.model.Sport;
 import ir.mahan.train.model.Validate;
 
@@ -58,10 +56,10 @@ public class FormPanel extends JPanel implements ActionListener {
 
 	JButton submitBtn;
 
-	private FormListener iformListener;
+	private FormListener formListener;
 
-	public void setIformListener(FormListener iformListener) {
-		this.iformListener = iformListener;
+	public void setformListener(FormListener iformListener) {
+		this.formListener = iformListener;
 	}
 
 	public FormPanel() {
@@ -287,37 +285,19 @@ public class FormPanel extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(null, error, "خطا",
 					JOptionPane.ERROR_MESSAGE);
 		else {
-			
+
 			FormEvent e = new FormEvent(nameTxt.getText(), familyTxt.getText(),
 					(Role) roleCB.getSelectedItem(), getSelectedCities(),
 					(Gender) genderCB.getSelectedItem(), getSelectedAge(),
-					favoriteSportList.getSelectedValue().toString(), isEmp.isSelected(), salaryTxt.getText());
-			iformListener.formEventOccured(e);
+					favoriteSportList.getSelectedValue().toString(),
+					isEmp.isSelected(), salaryTxt.getText());
+			formListener.formEventOccured(e);
 		}
 
 	}
 
-//	public FormEvent makeUser() {
-//		FormEvent user = new FormEvent(nameTxt.getText(), familyTxt.getText(),
-//				(Role) roleCB.getSelectedItem(), getSelectedCities(),
-//				(Gender) genderCB.getSelectedItem(), getSelectedAge(),
-//				favoriteSportList.getSelectedValue().toString(), isEmp.isSelected(), salaryTxt.getText());
-//		return user;
-//	}
-
-//	private String getSelectedSports() {
-//		// TODO Auto-generated method stub
-//		int[] selectedIx = favoriteSportList.getSelectedIndices();
-//		String sr = "";
-//		// Get all the selected items using the indices
-//		for (int i = 0; i < selectedIx.length; i++) {
-//			 sr = favoriteSportList.getModel()
-//					.getElementAt(selectedIx[i]).toString();
-//
-//		}
-//		return sr;
-//
-//	}
+	// private String getSelectedSports() {
+	// }
 
 	private void groupButton() {
 		ButtonGroup ages = new ButtonGroup();

@@ -1,12 +1,13 @@
 package ir.mahan.train.model;
 
+import ir.mahan.train.Controller.Controller;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -16,10 +17,10 @@ public class DataBase {
 
 	public DataBase() {
 		people = new ArrayList<>();
-		
+
 	}
 
-	private void addPerson(Person p) {
+	public void addPerson(Person p) {
 		people.add(p);
 	}
 
@@ -37,7 +38,7 @@ public class DataBase {
 
 	}
 
-	public void loadFromFile(File file) throws IOException {
+	public List<Person> loadFromFile(File file) throws IOException {
 		// TODO Auto-generated method stub
 
 		FileInputStream fileStream = new FileInputStream(file);
@@ -52,6 +53,8 @@ public class DataBase {
 		}
 		people.toArray(new Person[people.size()]);
 		os.close();
+
+		return people;
 
 	}
 }

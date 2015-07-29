@@ -29,7 +29,7 @@ public class Person implements Serializable{
 	}
 
 	public Person(String name, String family, Role role, String city,
-			Gender gender, String age, String favoriteSport, String salary
+			Gender gender, String age, String favoriteSport,  Boolean isEmp ,String salary
 			) {
 		super();
 		this.name = name;
@@ -40,6 +40,7 @@ public class Person implements Serializable{
 		this.age = age;
 		this.favoriteSport = favoriteSport;
 		this.salary = salary;
+		this.isEmp = isEmp;
 	
 	}
 

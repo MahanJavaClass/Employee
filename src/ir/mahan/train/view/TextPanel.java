@@ -29,26 +29,27 @@ public class TextPanel extends JPanel {
 		setFont(new Font(Font.SERIF, Font.PLAIN, 15));
 	}
 
-	public void setTextArea(String result) {
-		// String name = user.getName();
-		// String family = user.getFamily();
-		// Role role = user.getRole();
-		// String age = user.getAge();
-		// String city = user.getCity();
-		// String favSport = user.getFavoriteSport();
-		// Gender gender = user.getGender();
-		// String salary = user.getSalary();
-		// String sep = "::";
-		//
-		// String result = name + sep + family + sep + role + sep + age + sep
-		// + gender + sep + city + sep + favSport;
-		// if (user.getIsEmp()) {
-		// String isEmployee;
-		// isEmployee = sep + salary;
-		// result += isEmployee;
-		// this.textArea.append(result + "\n");
-		// } else
-		this.textArea.append(result + "\n");
+	public void setTextArea(FormEvent e) {
+		String name = e.getName();
+		String family = e.getFamily();
+		Role role = e.getRole();
+		String age = e.getAge();
+		String city = e.getCity();
+		String favSport = e.getFavoriteSport();
+		Gender gender = e.getGender();
+		String salary = e.getSalary();
+		Boolean isEmp = e.getIsEmp();
+		String sep = "::";
+
+		String result = name + sep + family + sep + role + sep + age + sep
+				+ gender + sep + city + sep + favSport;
+		if (isEmp) {
+			String isEmployee;
+			isEmployee = sep + salary;
+			result += isEmployee;
+			this.textArea.append(result + "\n");
+		} else
+			this.textArea.append(result + "\n");
 
 	}
 

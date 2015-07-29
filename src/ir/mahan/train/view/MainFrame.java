@@ -1,27 +1,14 @@
 package ir.mahan.train.view;
 
 import ir.mahan.train.Controller.Controller;
-import ir.mahan.train.model.DataBase;
-//import ir.mahan.train.model.FileStream;
-import ir.mahan.train.model.Ifile;
-import ir.mahan.train.model.FormListener;
-import ir.mahan.train.model.Person;
 
 import java.awt.BorderLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.nio.BufferOverflowException;
+import java.util.List;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
@@ -34,25 +21,14 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
-import org.omg.CORBA.portable.OutputStream;
-
 public class MainFrame extends JFrame {
 
 	TextPanel textPanel;
 	FormPanel formPanel;
-	// private JFileChooser fileChooser;
-	private Ifile ifile;
-	// FileStream fileStream;
 	JSplitPane splitPane;
 	JTabbedPane tabbedPane;
 	Controller controller;
 	JFileChooser fileChooser;
-
-	// User user;
-
-	public void setIfile(Ifile ifile) {
-		this.ifile = ifile;
-	}
 
 	public MainFrame(String title) {
 		super(title);
@@ -80,20 +56,18 @@ public class MainFrame extends JFrame {
 		splitPane.setOneTouchExpandable(true);
 		createMenu();
 		this.getContentPane().add(splitPane, BorderLayout.CENTER);
-		formPanel.setIformListener(new FormListener() {
+		controller = new Controller();
+		formPanel.setformListener(new FormListener() {
 
 			@Override
 			public void formEventOccured(FormEvent e) {
-			
+
 				try {
-					controller = new Controller();
 					controller.addPerson(e);
 				} catch (IOException e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
-				String output = e.toString();
-				textPanel.setTextArea(output);
+				textPanel.setTextArea(e);
 			}
 
 		});
@@ -151,20 +125,29 @@ public class MainFrame extends JFrame {
 
 		exportToFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				ActionEvent.CTRL_MASK));
-		
+
 		fileChooser = new JFileChooser();
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new userFileFilter());
-		
+
 		// fileStream = new FileStream();
 		loadFileMenuItem.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					try {
+						List<FormEvent> formEvents = controller.loadPeople(selectedFile);
+								for (FormEvent e : formEvents) {
+									
+									textPanel.setTextArea(e);
+								}
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
 
-					// textPanel.setTextArea(fileStream.readFromFile());
-					
 				}
 			}
 		});
@@ -177,7 +160,7 @@ public class MainFrame extends JFrame {
 				if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
 					try {
-						controller.SaveToFile(selectedFile);
+						controller.SavePerson(selectedFile);
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -203,5 +186,4 @@ public class MainFrame extends JFrame {
 		return menuBar;
 
 	}
-
 }

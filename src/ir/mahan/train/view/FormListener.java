@@ -1,6 +1,5 @@
-package ir.mahan.train.model;
+package ir.mahan.train.view;
 
-import ir.mahan.train.view.FormEvent;
 
 public interface FormListener {
 	

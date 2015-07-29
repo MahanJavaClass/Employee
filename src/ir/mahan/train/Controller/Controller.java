@@ -2,21 +2,20 @@ package ir.mahan.train.Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JFileChooser;
-import javax.swing.plaf.FileChooserUI;
 
 import ir.mahan.train.model.DataBase;
 import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.Person;
 import ir.mahan.train.model.Role;
 import ir.mahan.train.view.FormEvent;
-import ir.mahan.train.view.userFileFilter;
 
 public class Controller {
 	DataBase db;
 	Person person;
-	JFileChooser fileChooser;
 	File selectedFile;
 	String name;
 	String family;
@@ -29,16 +28,45 @@ public class Controller {
 	Boolean isEmp;
 
 	public Controller() {
-
+		db = new DataBase();
 	}
 
 	public void addPerson(FormEvent e) throws IOException {
+
 		person = ConvertFormEventToPerson(e);
+		db.addPerson(person);
 	}
 
-	public void SaveToFile(File file) throws IOException {
-		db = new DataBase();
+	public void SavePerson(File file) throws IOException {
+
 		db.saveToFile(file);
+	}
+
+	public List<FormEvent> loadPeople(File file) throws IOException {
+
+		List<Person> people = db.loadFromFile(file);
+		List<FormEvent> formEvents = new ArrayList<>();
+		for (Person person : people) {
+			formEvents.add(convertPersonToFormEvent(person));
+		}
+		System.out.println(formEvents);
+		return formEvents;
+	}
+
+	private FormEvent convertPersonToFormEvent(Person p) {
+		// TODO Auto-generated method stub
+		String name = p.getName();
+		String family = p.getFamily();
+		Role role = p.getRole();
+		String age = p.getAge();
+		String city = p.getCity();
+		String favSport = p.getFavoriteSport();
+		Gender gender = p.getGender();
+		String salary = p.getSalary();
+		Boolean isEmp = p.getIsEmp();
+		FormEvent e = new FormEvent(name, family, role, age, gender, city, favSport, isEmp, salary);
+		System.out.println(e.getIsEmp());
+		return e;
 	}
 
 	private Person ConvertFormEventToPerson(FormEvent e) {
@@ -51,12 +79,11 @@ public class Controller {
 		String favSport = e.getFavoriteSport();
 		Gender gender = e.getGender();
 		String salary = e.getSalary();
+		Boolean isEmp = e.getIsEmp();
 		Person person = new Person(name, family, role, city, gender, age,
-				favSport, salary);
+				favSport, isEmp, salary );
 		return person;
-		
-//		String name, String family, Role role, String city,
-//		Gender gender, String age, String favoriteSport, String salary
+
 	}
 
 	public String getName() {
@@ -130,4 +157,5 @@ public class Controller {
 	public void setIsEmp(Boolean isEmp) {
 		this.isEmp = isEmp;
 	}
+
 }
