@@ -1,6 +1,8 @@
 package ir.mahan.train.model;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable{
 	String name;
 	String family;
 	Gender gender;

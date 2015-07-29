@@ -3,8 +3,11 @@ package ir.mahan.train.view;
 import ir.mahan.train.model.Role;
 import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.User;
+
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
+
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -22,8 +25,9 @@ public class TextPanel extends JPanel {
 		dim.width = 400;
 		setPreferredSize(dim);
 
-		setBorder(BorderFactory.createTitledBorder("TextArea"));
+		setBorder(BorderFactory.createTitledBorder(""));
 		add(new JScrollPane(textArea), BorderLayout.CENTER);
+		setFont(new Font(Font.SERIF,Font.PLAIN,15));
 	}
 	public void setTextArea(User user) {
 		String name = user.getName();

@@ -1,17 +1,20 @@
 package ir.mahan.train.view;
 
+import ir.mahan.train.model.Ifile;
 import ir.mahan.train.model.Role;
 import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.IuserListener;
 import ir.mahan.train.model.Sport;
 import ir.mahan.train.model.User;
 import ir.mahan.train.model.Validate;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -47,7 +50,7 @@ public class FormPanel extends JPanel implements ActionListener {
 
 	JComboBox<Role> roleCB;
 	JComboBox<Gender> genderCB;
-//comment
+	// comment
 	JList favoriteSportList;
 
 	JCheckBox city01;
@@ -267,7 +270,7 @@ public class FormPanel extends JPanel implements ActionListener {
 	}
 
 	private void submitAction() {
-		User user;
+
 		Validate validate;
 		String error = "";
 		validate = new Validate();
@@ -285,15 +288,33 @@ public class FormPanel extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(null, error, "خطا",
 					JOptionPane.ERROR_MESSAGE);
 		else {
-			user = new User(nameTxt.getText(), familyTxt.getText(),
-					(Role) roleCB.getSelectedItem(), getSelectedCities(),
-					(Gender) genderCB.getSelectedItem(), getSelectedAge(),
-					favoriteSportList.getSelectedValue().toString(),
-					isEmp.isSelected(), salaryTxt.getText());
-			iuser.userEmitted(user);
+
+			iuser.userEmitted(makeUser());
 		}
 
 	}
+
+	public User makeUser() {
+		User user = new User(nameTxt.getText(), familyTxt.getText(),
+				(Role) roleCB.getSelectedItem(), getSelectedCities(),
+				(Gender) genderCB.getSelectedItem(), getSelectedAge(),
+				favoriteSportList.getSelectedValue().toString(), isEmp.isSelected(), salaryTxt.getText());
+		return user;
+	}
+
+//	private String getSelectedSports() {
+//		// TODO Auto-generated method stub
+//		int[] selectedIx = favoriteSportList.getSelectedIndices();
+//		String sr = "";
+//		// Get all the selected items using the indices
+//		for (int i = 0; i < selectedIx.length; i++) {
+//			 sr = favoriteSportList.getModel()
+//					.getElementAt(selectedIx[i]).toString();
+//
+//		}
+//		return sr;
+//
+//	}
 
 	private void groupButton() {
 		ButtonGroup ages = new ButtonGroup();
