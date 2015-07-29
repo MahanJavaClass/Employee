@@ -1,9 +1,9 @@
 package ir.mahan.train.view;
 
+import ir.mahan.train.Controller.Controller;
 import ir.mahan.train.model.FileStream;
 import ir.mahan.train.model.Ifile;
-import ir.mahan.train.model.IuserListener;
-import ir.mahan.train.model.User;
+import ir.mahan.train.model.FormListener;
 
 import java.awt.BorderLayout;
 import java.awt.Window;
@@ -34,6 +34,8 @@ import javax.swing.KeyStroke;
 
 import org.omg.CORBA.portable.OutputStream;
 
+
+
 public class MainFrame extends JFrame {
 
 	TextPanel textPanel;
@@ -43,6 +45,7 @@ public class MainFrame extends JFrame {
 	FileStream fileStream;
 	JSplitPane splitPane;
 	JTabbedPane tabbedPane;
+	Controller controller;
 
 	// User user;
 
@@ -78,11 +81,13 @@ public class MainFrame extends JFrame {
 		// this.getContentPane().add(textPanel, BorderLayout.EAST);
 		// this.getContentPane().add(formPanel, BorderLayout.WEST);
 		this.getContentPane().add(splitPane, BorderLayout.CENTER);
-		formPanel.setIuser(new IuserListener() {
+		formPanel.setIuser(new FormListener() {
 
 			@Override
-			public void userEmitted(User user) {
-				textPanel.setTextArea(user);
+			public void formEventOccured(FormEvent e) {
+				controller.addPerson(e);
+				String output = e.toString();
+				textPanel.setTextArea(output);
 			}
 
 		});

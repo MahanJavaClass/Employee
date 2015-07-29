@@ -1,8 +1,11 @@
-package ir.mahan.train.model;
+package ir.mahan.train.view;
+
+import ir.mahan.train.model.Gender;
+import ir.mahan.train.model.Role;
 
 import java.io.Serializable;
 
-public class User implements Serializable{
+public class FormEvent implements Serializable{
 	String name;
 	String family;
 	Gender gender;
@@ -13,7 +16,7 @@ public class User implements Serializable{
 	String salary;
 	Boolean isEmp;
 
-	public User(String name, String family, Role role, String age,
+	public FormEvent(String name, String family, Role role, String age,
 			Gender gender, String city, String favSport, Boolean isEmp,
 			String salary) {
 		super();

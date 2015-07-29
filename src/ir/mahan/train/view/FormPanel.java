@@ -3,9 +3,8 @@ package ir.mahan.train.view;
 import ir.mahan.train.model.Ifile;
 import ir.mahan.train.model.Role;
 import ir.mahan.train.model.Gender;
-import ir.mahan.train.model.IuserListener;
+import ir.mahan.train.model.FormListener;
 import ir.mahan.train.model.Sport;
-import ir.mahan.train.model.User;
 import ir.mahan.train.model.Validate;
 
 import java.awt.Color;
@@ -59,9 +58,9 @@ public class FormPanel extends JPanel implements ActionListener {
 
 	JButton submitBtn;
 
-	private IuserListener iuser;
+	private FormListener iuser;
 
-	public void setIuser(IuserListener iuser) {
+	public void setIuser(FormListener iuser) {
 		this.iuser = iuser;
 	}
 
@@ -289,13 +288,13 @@ public class FormPanel extends JPanel implements ActionListener {
 					JOptionPane.ERROR_MESSAGE);
 		else {
 
-			iuser.userEmitted(makeUser());
+			iuser.formEventOccured(makeUser());
 		}
 
 	}
 
-	public User makeUser() {
-		User user = new User(nameTxt.getText(), familyTxt.getText(),
+	public FormEvent makeUser() {
+		FormEvent user = new FormEvent(nameTxt.getText(), familyTxt.getText(),
 				(Role) roleCB.getSelectedItem(), getSelectedCities(),
 				(Gender) genderCB.getSelectedItem(), getSelectedAge(),
 				favoriteSportList.getSelectedValue().toString(), isEmp.isSelected(), salaryTxt.getText());
