@@ -63,7 +63,7 @@ public class FormPanel extends JPanel implements ActionListener {
 	public void setIuser(FormListener iuser) {
 		this.iuser = iuser;
 	}
-	//comment 
+	//comment by sedighe
 
 	public FormPanel() {
 		Dimension dim = getPreferredSize();
