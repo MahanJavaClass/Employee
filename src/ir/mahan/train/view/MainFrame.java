@@ -23,7 +23,8 @@ import javax.swing.KeyStroke;
 
 public class MainFrame extends JFrame {
 
-	TextPanel textPanel;
+	//TextPanel textPanel;
+	TablePanel tablePanel;
 	FormPanel formPanel;
 	JSplitPane splitPane;
 	JTabbedPane tabbedPane;
@@ -39,7 +40,7 @@ public class MainFrame extends JFrame {
 	}
 
 	private void setView() {
-		this.setSize(740, 500);
+		this.setSize(940, 500);
 		this.setVisible(true);
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -47,12 +48,14 @@ public class MainFrame extends JFrame {
 
 	private void addComponent() {
 
-		textPanel = new TextPanel();
+		//textPanel = new TextPanel();
+		tablePanel = new TablePanel();
 		formPanel = new FormPanel();
 		tabbedPane = new JTabbedPane();
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel,
 				tabbedPane);
-		tabbedPane.add("Text Area", textPanel);
+		//tabbedPane.add("Text Area", textPanel);
+		tabbedPane.add("Text Area", tablePanel);
 		splitPane.setOneTouchExpandable(true);
 		createMenu();
 		this.getContentPane().add(splitPane, BorderLayout.CENTER);
@@ -67,7 +70,8 @@ public class MainFrame extends JFrame {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				textPanel.setTextArea(e);
+				//textPanel.setTextArea(e);
+				tablePanel.setTable(e);
 			}
 
 		});
@@ -141,7 +145,8 @@ public class MainFrame extends JFrame {
 						List<FormEvent> formEvents = controller.loadPeople(selectedFile);
 								for (FormEvent e : formEvents) {
 									
-									textPanel.setTextArea(e);
+									//textPanel.setTextArea(e);
+									tablePanel.setTable(e);
 								}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block

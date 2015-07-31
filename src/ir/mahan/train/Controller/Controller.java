@@ -49,7 +49,6 @@ public class Controller {
 		for (Person person : people) {
 			formEvents.add(convertPersonToFormEvent(person));
 		}
-		System.out.println(formEvents);
 		return formEvents;
 	}
 
@@ -64,8 +63,9 @@ public class Controller {
 		Gender gender = p.getGender();
 		String salary = p.getSalary();
 		Boolean isEmp = p.getIsEmp();
-		FormEvent e = new FormEvent(name, family, role, age, gender, city, favSport, isEmp, salary);
-		System.out.println(e.getIsEmp());
+		FormEvent e = new FormEvent(name, family, role, age, gender, city,
+				favSport, isEmp, salary);
+
 		return e;
 	}
 
@@ -81,7 +81,7 @@ public class Controller {
 		String salary = e.getSalary();
 		Boolean isEmp = e.getIsEmp();
 		Person person = new Person(name, family, role, city, gender, age,
-				favSport, isEmp, salary );
+				favSport, isEmp, salary);
 		return person;
 
 	}
