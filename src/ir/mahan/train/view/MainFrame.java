@@ -1,13 +1,15 @@
 package ir.mahan.train.view;
 
-import ir.mahan.train.model.IuserListener;
-import ir.mahan.train.model.User;
+import ir.mahan.train.Controller.Controller;
 
 import java.awt.BorderLayout;
-import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
@@ -16,28 +18,33 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JSplitPane;
+import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
 
 public class MainFrame extends JFrame {
 
 	TextPanel textPanel;
+	TablePanel tablePanel;
 	FormPanel formPanel;
-	private JFileChooser fileChooser;
+	JSplitPane splitPane;
+	JTabbedPane tabbedPane;
+	Controller controller;
+	JFileChooser fileChooser;
+	private List<FormEvent> dbForm;
 
 	public MainFrame(String title) {
 		super(title);
 		setView();
 		addComponent();
-
-		fileChooser = new JFileChooser();
-		fileChooser.setAcceptAllFileFilterUsed(false);
-		fileChooser.addChoosableFileFilter(new userFileFilter());
-
 		setJMenuBar(createMenu());
+		dbForm = new ArrayList<FormEvent>();
+		tablePanel.setData(dbForm);
+
 	}
 
 	private void setView() {
-		this.setSize(740, 500);
+		this.setSize(940, 500);
 		this.setVisible(true);
 		this.setLayout(new BorderLayout());
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -46,18 +53,32 @@ public class MainFrame extends JFrame {
 	private void addComponent() {
 
 		textPanel = new TextPanel();
+		tablePanel = new TablePanel();
 		formPanel = new FormPanel();
+		tabbedPane = new JTabbedPane();
+		tabbedPane.add("Text Area", textPanel);
+		tabbedPane.add("Person DB", tablePanel);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel,
+				tabbedPane);
+		splitPane.setOneTouchExpandable(true);
+		this.getContentPane().add(splitPane, BorderLayout.CENTER);
 		createMenu();
-		this.getContentPane().add(textPanel, BorderLayout.EAST);
-		this.getContentPane().add(formPanel, BorderLayout.WEST);
-
-		formPanel.setIuser(new IuserListener() {
+		controller = new Controller();
+		formPanel.setformListener(new FormListener() {
 
 			@Override
-			public void userEmitted(User user) {
-				textPanel.setTextArea(user);
-			}
+			public void formEventOccured(FormEvent e) {
 
+				try {
+					controller.addPerson(e);
+					dbForm.add(e);
+					textPanel.setTextArea(e);
+					tablePanel.refresh();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+
+			}
 		});
 	}
 
@@ -66,7 +87,7 @@ public class MainFrame extends JFrame {
 		JMenuBar menuBar;
 		JMenu fileMenu;
 		JMenu windowMenu;
-		JMenuItem saveMenuItem;
+		JMenuItem exportToFile;
 		JMenuItem loadFileMenuItem;
 		JMenuItem exitMenuItem;
 
@@ -75,12 +96,12 @@ public class MainFrame extends JFrame {
 		fileMenu = new JMenu("File");
 		windowMenu = new JMenu("Window");
 
-		saveMenuItem = new JMenuItem("Export Data...");
+		exportToFile = new JMenuItem("Export Data...");
 		loadFileMenuItem = new JMenuItem("Import Data...");
 		exitMenuItem = new JMenuItem("Exit");
 		JMenuItem prefsItem = new JMenuItem("preferences");
 
-		fileMenu.add(saveMenuItem);
+		fileMenu.add(exportToFile);
 		fileMenu.add(loadFileMenuItem);
 		fileMenu.addSeparator();
 		fileMenu.add(exitMenuItem);
@@ -111,26 +132,44 @@ public class MainFrame extends JFrame {
 		loadFileMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_I,
 				ActionEvent.CTRL_MASK));
 
-		saveMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
+		exportToFile.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S,
 				ActionEvent.CTRL_MASK));
 
-		loadFileMenuItem.addActionListener(new ActionListener() {
+		fileChooser = new JFileChooser();
+		fileChooser.setAcceptAllFileFilterUsed(false);
+		fileChooser.addChoosableFileFilter(new userFileFilter());
 
+		loadFileMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
 				if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					try {
+						List<FormEvent> formEvents = controller
+								.loadPeople(selectedFile);
+						for (FormEvent e : formEvents) {
+							textPanel.setTextArea(e);
+							dbForm.add(e);
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+
 				}
 			}
 		});
 
-		saveMenuItem.addActionListener(new ActionListener() {
-
+		exportToFile.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				// TODO Auto-generated method stub
-				if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
 
+				if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					try {
+						controller.SavePerson(selectedFile);
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		});

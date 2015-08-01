@@ -2,13 +2,10 @@ package ir.mahan.train.view;
 
 import ir.mahan.train.model.Role;
 import ir.mahan.train.model.Gender;
-import ir.mahan.train.model.IuserListener;
 import ir.mahan.train.model.Sport;
-import ir.mahan.train.model.User;
 import ir.mahan.train.model.Validate;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -21,7 +18,6 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JLabel;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
@@ -60,10 +56,10 @@ public class FormPanel extends JPanel implements ActionListener {
 
 	JButton submitBtn;
 
-	private IuserListener iuser;
+	private FormListener formListener;
 
-	public void setIuser(IuserListener iuser) {
-		this.iuser = iuser;
+	public void setformListener(FormListener iformListener) {
+		this.formListener = iformListener;
 	}
 
 	public FormPanel() {
@@ -78,6 +74,7 @@ public class FormPanel extends JPanel implements ActionListener {
 		submitBtn.addActionListener(this);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initializeFormComponents() {
 		nameLbl = new JLabel("Name:");
 		familyLbl = new JLabel("Family:");
@@ -86,7 +83,7 @@ public class FormPanel extends JPanel implements ActionListener {
 
 		roleLbl = new JLabel("Role:");
 		roleCB = new JComboBox<Role>();
-		roleCB.setModel(new DefaultComboBoxModel(Role.values()));
+		roleCB.setModel(new DefaultComboBoxModel<Role>(Role.values()));
 
 		ageLbl = new JLabel("age:");
 		ageOption1 = new JRadioButton("18");
@@ -95,14 +92,14 @@ public class FormPanel extends JPanel implements ActionListener {
 
 		genderLbl = new JLabel("Gender:");
 		genderCB = new JComboBox<Gender>();
-		genderCB.setModel(new DefaultComboBoxModel(Gender.values()));
+		genderCB.setModel(new DefaultComboBoxModel<Gender>(Gender.values()));
 
 		cityLbl = new JLabel("City:");
 		city01 = new JCheckBox("Tehran");
 		city02 = new JCheckBox("Kerman");
 
 		sportLbl = new JLabel("Favorite Sport:");
-		favoriteSportList = new JList(Sport.values());
+		favoriteSportList = new JList<Object>(Sport.values());
 		favoriteSportList.setSelectedIndex(0);
 
 		isEmp = new JCheckBox("Is Employee");
@@ -271,7 +268,7 @@ public class FormPanel extends JPanel implements ActionListener {
 	}
 
 	private void submitAction() {
-		User user;
+
 		Validate validate;
 		String error = "";
 		validate = new Validate();
@@ -289,12 +286,13 @@ public class FormPanel extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(null, error, "خطا",
 					JOptionPane.ERROR_MESSAGE);
 		else {
-			user = new User(nameTxt.getText(), familyTxt.getText(),
+
+			FormEvent e = new FormEvent(nameTxt.getText(), familyTxt.getText(),
 					(Role) roleCB.getSelectedItem(), getSelectedCities(),
 					(Gender) genderCB.getSelectedItem(), getSelectedAge(),
 					favoriteSportList.getSelectedValue().toString(),
 					isEmp.isSelected(), salaryTxt.getText());
-			iuser.userEmitted(user);
+			formListener.formEventOccured(e);
 		}
 
 	}

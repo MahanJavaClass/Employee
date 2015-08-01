@@ -1,6 +1,10 @@
 package ir.mahan.train.model;
 
-public class User {
+import java.io.Serializable;
+
+public class Person implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	String name;
 	String family;
 	Gender gender;
@@ -11,21 +15,6 @@ public class User {
 	String salary;
 	Boolean isEmp;
 
-	public User(String name, String family, Role role, String age,
-			Gender gender, String city, String favSport, Boolean isEmp,
-			String salary) {
-		super();
-		this.name = name;
-		this.family = family;
-		this.gender = gender;
-		this.city = city;
-		this.role = role;
-		this.age = age;
-		this.favoriteSport = favSport;
-		this.isEmp = isEmp;
-		this.salary = salary;
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -33,6 +22,23 @@ public class User {
 	public void setName(String name) {
 		this.name = name;
 	}
+
+	public Person(String name, String family, Role role, String city,
+			Gender gender, String age, String favoriteSport,  Boolean isEmp ,String salary
+			) {
+		super();
+		this.name = name;
+		this.family = family;
+		this.gender = gender;
+		this.city = city;
+		this.role = role;
+		this.age = age;
+		this.favoriteSport = favoriteSport;
+		this.salary = salary;
+		this.isEmp = isEmp;
+	
+	}
+
 
 	public String getFamily() {
 		return family;
@@ -97,4 +103,5 @@ public class User {
 	public void setIsEmp(Boolean isEmp) {
 		this.isEmp = isEmp;
 	}
+
 }
