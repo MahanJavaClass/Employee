@@ -285,7 +285,7 @@ public class FormPanel extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(null, error, "خطا",
 					JOptionPane.ERROR_MESSAGE);
 		else {
-
+			 
 			FormEvent e = new FormEvent(nameTxt.getText(), familyTxt.getText(),
 					(Role) roleCB.getSelectedItem(), getSelectedCities(),
 					(Gender) genderCB.getSelectedItem(), getSelectedAge(),

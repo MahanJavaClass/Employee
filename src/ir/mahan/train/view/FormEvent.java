@@ -6,6 +6,8 @@ import ir.mahan.train.model.Role;
 import java.io.Serializable;
 
 public class FormEvent implements Serializable{
+	static int count;
+    int ID;
 	String name;
 	String family;
 	Gender gender;
@@ -20,6 +22,7 @@ public class FormEvent implements Serializable{
 			Gender gender, String city, String favSport, Boolean isEmp,
 			String salary) {
 		super();
+		this.ID = count++;
 		this.name = name;
 		this.family = family;
 		this.gender = gender;

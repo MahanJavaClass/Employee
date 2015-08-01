@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.JCheckBoxMenuItem;
@@ -23,18 +24,22 @@ import javax.swing.KeyStroke;
 
 public class MainFrame extends JFrame {
 
-	//TextPanel textPanel;
+    TextPanel textPanel;
 	TablePanel tablePanel;
 	FormPanel formPanel;
 	JSplitPane splitPane;
 	JTabbedPane tabbedPane;
 	Controller controller;
 	JFileChooser fileChooser;
+	private List<FormEvent> dbForm ;
+		
 
 	public MainFrame(String title) {
 		super(title);
 		setView();
 		addComponent();
+		dbForm = new ArrayList<FormEvent>();
+		tablePanel.setData(dbForm);
 
 		setJMenuBar(createMenu());
 	}
@@ -48,14 +53,14 @@ public class MainFrame extends JFrame {
 
 	private void addComponent() {
 
-		//textPanel = new TextPanel();
+		textPanel = new TextPanel();
 		tablePanel = new TablePanel();
 		formPanel = new FormPanel();
 		tabbedPane = new JTabbedPane();
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel,
 				tabbedPane);
-		//tabbedPane.add("Text Area", textPanel);
-		tabbedPane.add("Text Area", tablePanel);
+		tabbedPane.add("Text Area", textPanel);
+		tabbedPane.add("Person DB", tablePanel);
 		splitPane.setOneTouchExpandable(true);
 		createMenu();
 		this.getContentPane().add(splitPane, BorderLayout.CENTER);
@@ -71,7 +76,11 @@ public class MainFrame extends JFrame {
 					e1.printStackTrace();
 				}
 				//textPanel.setTextArea(e);
-				tablePanel.setTable(e);
+				//tablePanel.setTable(e);
+				dbForm.add(e);
+				String output = e.toString();
+				textPanel.setTextArea(e);
+				tablePanel.refresh();
 			}
 
 		});
@@ -146,7 +155,7 @@ public class MainFrame extends JFrame {
 								for (FormEvent e : formEvents) {
 									
 									//textPanel.setTextArea(e);
-									tablePanel.setTable(e);
+									//tablePanel.setTable(e);
 								}
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
