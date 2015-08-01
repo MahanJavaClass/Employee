@@ -30,21 +30,24 @@ public class PersonTableModel extends AbstractTableModel {
 		switch (col) {
 		case 0:
 			return person.ID;
-
 		case 1:
 			return person.getName();
-
 		case 2:
 			return person.getFamily();
 		case 3:
 			return person.getRole();
-
 		case 4:
+			return person.getCity();
+		case 5:
+			return person.getGender();
+		case 6:
 			return person.getAge();
-
+		case 7:
+			return person.getFavoriteSport();
+		case 8:
+			return person.getSalary();
 		}
 		return null;
-
 	}
 
 	@Override
