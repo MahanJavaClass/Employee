@@ -47,7 +47,7 @@ public class FormPanel extends JPanel implements ActionListener {
 
 	JComboBox<Role> roleCB;
 	JComboBox<Gender> genderCB;
-	// comment
+
 	JList favoriteSportList;
 
 	JCheckBox city01;
@@ -74,6 +74,7 @@ public class FormPanel extends JPanel implements ActionListener {
 		submitBtn.addActionListener(this);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void initializeFormComponents() {
 		nameLbl = new JLabel("Name:");
 		familyLbl = new JLabel("Family:");
@@ -82,7 +83,7 @@ public class FormPanel extends JPanel implements ActionListener {
 
 		roleLbl = new JLabel("Role:");
 		roleCB = new JComboBox<Role>();
-		roleCB.setModel(new DefaultComboBoxModel(Role.values()));
+		roleCB.setModel(new DefaultComboBoxModel<Role>(Role.values()));
 
 		ageLbl = new JLabel("age:");
 		ageOption1 = new JRadioButton("18");
@@ -91,14 +92,14 @@ public class FormPanel extends JPanel implements ActionListener {
 
 		genderLbl = new JLabel("Gender:");
 		genderCB = new JComboBox<Gender>();
-		genderCB.setModel(new DefaultComboBoxModel(Gender.values()));
+		genderCB.setModel(new DefaultComboBoxModel<Gender>(Gender.values()));
 
 		cityLbl = new JLabel("City:");
 		city01 = new JCheckBox("Tehran");
 		city02 = new JCheckBox("Kerman");
 
 		sportLbl = new JLabel("Favorite Sport:");
-		favoriteSportList = new JList(Sport.values());
+		favoriteSportList = new JList<Object>(Sport.values());
 		favoriteSportList.setSelectedIndex(0);
 
 		isEmp = new JCheckBox("Is Employee");
@@ -285,7 +286,7 @@ public class FormPanel extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(null, error, "خطا",
 					JOptionPane.ERROR_MESSAGE);
 		else {
-			 
+
 			FormEvent e = new FormEvent(nameTxt.getText(), familyTxt.getText(),
 					(Role) roleCB.getSelectedItem(), getSelectedCities(),
 					(Gender) genderCB.getSelectedItem(), getSelectedAge(),
@@ -295,9 +296,6 @@ public class FormPanel extends JPanel implements ActionListener {
 		}
 
 	}
-
-	// private String getSelectedSports() {
-	// }
 
 	private void groupButton() {
 		ButtonGroup ages = new ButtonGroup();

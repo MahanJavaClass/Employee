@@ -24,24 +24,23 @@ import javax.swing.KeyStroke;
 
 public class MainFrame extends JFrame {
 
-    TextPanel textPanel;
+	TextPanel textPanel;
 	TablePanel tablePanel;
 	FormPanel formPanel;
 	JSplitPane splitPane;
 	JTabbedPane tabbedPane;
 	Controller controller;
 	JFileChooser fileChooser;
-	private List<FormEvent> dbForm ;
-		
+	private List<FormEvent> dbForm;
 
 	public MainFrame(String title) {
 		super(title);
 		setView();
 		addComponent();
+		setJMenuBar(createMenu());
 		dbForm = new ArrayList<FormEvent>();
 		tablePanel.setData(dbForm);
 
-		setJMenuBar(createMenu());
 	}
 
 	private void setView() {
@@ -57,13 +56,13 @@ public class MainFrame extends JFrame {
 		tablePanel = new TablePanel();
 		formPanel = new FormPanel();
 		tabbedPane = new JTabbedPane();
-		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel,
-				tabbedPane);
 		tabbedPane.add("Text Area", textPanel);
 		tabbedPane.add("Person DB", tablePanel);
+		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel,
+				tabbedPane);
 		splitPane.setOneTouchExpandable(true);
-		createMenu();
 		this.getContentPane().add(splitPane, BorderLayout.CENTER);
+		createMenu();
 		controller = new Controller();
 		formPanel.setformListener(new FormListener() {
 
@@ -72,17 +71,14 @@ public class MainFrame extends JFrame {
 
 				try {
 					controller.addPerson(e);
+					dbForm.add(e);
+					textPanel.setTextArea(e);
+					tablePanel.refresh();
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-				//textPanel.setTextArea(e);
-				//tablePanel.setTable(e);
-				dbForm.add(e);
-				String output = e.toString();
-				textPanel.setTextArea(e);
-				tablePanel.refresh();
-			}
 
+			}
 		});
 	}
 
@@ -143,22 +139,19 @@ public class MainFrame extends JFrame {
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new userFileFilter());
 
-		// fileStream = new FileStream();
 		loadFileMenuItem.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
 					try {
-						List<FormEvent> formEvents = controller.loadPeople(selectedFile);
-								for (FormEvent e : formEvents) {
-									
-									//textPanel.setTextArea(e);
-									//tablePanel.setTable(e);
-								}
+						List<FormEvent> formEvents = controller
+								.loadPeople(selectedFile);
+						for (FormEvent e : formEvents) {
+							textPanel.setTextArea(e);
+							dbForm.add(e);
+						}
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 
@@ -167,7 +160,6 @@ public class MainFrame extends JFrame {
 		});
 
 		exportToFile.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -176,7 +168,6 @@ public class MainFrame extends JFrame {
 					try {
 						controller.SavePerson(selectedFile);
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 				}

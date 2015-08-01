@@ -10,12 +10,10 @@ import javax.swing.JTable;
 public class TablePanel extends JPanel {
 
 	JTable table;
-	private List<FormEvent> db;
 	private PersonTableModel personTableModel;
 
 	public TablePanel() {
 		setLayout(new BorderLayout());
-
 		Dimension dim = getPreferredSize();
 		dim.width = 500;
 		setPreferredSize(dim);
