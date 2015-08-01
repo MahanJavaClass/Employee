@@ -4,9 +4,6 @@ import java.io.Serializable;
 
 public class Person implements Serializable{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	String name;
 	String family;
@@ -17,8 +14,6 @@ public class Person implements Serializable{
 	String favoriteSport;
 	String salary;
 	Boolean isEmp;
-
-
 
 	public String getName() {
 		return name;
