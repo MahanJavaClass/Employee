@@ -1,7 +1,6 @@
 package ir.mahan.train.view;
 
 import ir.mahan.train.Controller.Controller;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

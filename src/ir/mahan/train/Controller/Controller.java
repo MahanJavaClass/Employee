@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JFileChooser;
-
 import ir.mahan.train.model.DataBase;
 import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.Person;

@@ -1,7 +1,4 @@
 package ir.mahan.train.model;
-
-import ir.mahan.train.Controller.Controller;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
