@@ -74,7 +74,6 @@ public class FormPanel extends JPanel implements ActionListener {
 		submitBtn.addActionListener(this);
 	}
 
-	@SuppressWarnings("unchecked")
 	private void initializeFormComponents() {
 		nameLbl = new JLabel("Name:");
 		familyLbl = new JLabel("Family:");
@@ -268,7 +267,6 @@ public class FormPanel extends JPanel implements ActionListener {
 	}
 
 	private void submitAction() {
-
 		Validate validate;
 		String error = "";
 		validate = new Validate();

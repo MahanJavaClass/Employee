@@ -142,18 +142,20 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+					dbForm.clear();
+					textPanel.textArea.setText("");
 					File selectedFile = fileChooser.getSelectedFile();
 					try {
 						List<FormEvent> formEvents = controller
 								.loadPeople(selectedFile);
+						dbForm.addAll(formEvents);
 						for (FormEvent e : formEvents) {
 							textPanel.setTextArea(e);
-							dbForm.add(e);
+
 						}
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-
 				}
 			}
 		});

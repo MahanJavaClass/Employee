@@ -1,4 +1,5 @@
 package ir.mahan.train.model;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -7,6 +8,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class DataBase {
@@ -14,7 +16,6 @@ public class DataBase {
 
 	public DataBase() {
 		people = new ArrayList<>();
-
 	}
 
 	public void addPerson(Person p) {
@@ -50,7 +51,6 @@ public class DataBase {
 		}
 		people.toArray(new Person[people.size()]);
 		os.close();
-
 		return people;
 
 	}
