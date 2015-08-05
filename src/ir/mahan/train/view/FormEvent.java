@@ -5,9 +5,10 @@ import ir.mahan.train.model.Role;
 
 import java.io.Serializable;
 
-public class FormEvent implements Serializable{
-	static int count;
-    int ID;
+public class FormEvent implements Serializable {
+	private static final long serialVersionUID = 1L;
+	public static int count;
+	int ID;
 	String name;
 	String family;
 	Gender gender;

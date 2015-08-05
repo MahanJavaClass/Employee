@@ -8,7 +8,6 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class DataBase {
@@ -22,6 +21,7 @@ public class DataBase {
 		people.add(p);
 	}
 
+	@SuppressWarnings("unused")
 	private void deletePerson(int index) {
 		people.remove(index);
 	}
@@ -53,5 +53,9 @@ public class DataBase {
 		os.close();
 		return people;
 
+	}
+
+	public List<Person> getPeopleList() {
+		return people;
 	}
 }

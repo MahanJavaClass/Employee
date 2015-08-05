@@ -23,6 +23,7 @@ import javax.swing.KeyStroke;
 
 public class MainFrame extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	TextPanel textPanel;
 	TablePanel tablePanel;
 	FormPanel formPanel;
@@ -143,15 +144,16 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent arg0) {
 				if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
 					dbForm.clear();
+					FormEvent.count = 0;
 					textPanel.textArea.setText("");
 					File selectedFile = fileChooser.getSelectedFile();
 					try {
 						List<FormEvent> formEvents = controller
 								.loadPeople(selectedFile);
-						dbForm.addAll(formEvents);
+
 						for (FormEvent e : formEvents) {
 							textPanel.setTextArea(e);
-
+							dbForm.add(e);
 						}
 					} catch (IOException e) {
 						e.printStackTrace();

@@ -14,6 +14,7 @@ import javax.swing.JTextArea;
 
 public class TextPanel extends JPanel {
 
+	private static final long serialVersionUID = 1L;
 	JTextArea textArea;
 
 	public TextPanel() {
@@ -30,7 +31,7 @@ public class TextPanel extends JPanel {
 	}
 
 	public void setTextArea(FormEvent e) {
-		
+
 		String name = e.getName();
 		String family = e.getFamily();
 		Role role = e.getRole();

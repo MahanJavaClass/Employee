@@ -28,6 +28,7 @@ import javax.swing.border.Border;
 
 public class FormPanel extends JPanel implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
 	JLabel nameLbl;
 	JLabel familyLbl;
 	JLabel roleLbl;
@@ -48,7 +49,7 @@ public class FormPanel extends JPanel implements ActionListener {
 	JComboBox<Role> roleCB;
 	JComboBox<Gender> genderCB;
 
-	JList favoriteSportList;
+	JList<Sport> favoriteSportList;
 
 	JCheckBox city01;
 	JCheckBox city02;
@@ -98,7 +99,7 @@ public class FormPanel extends JPanel implements ActionListener {
 		city02 = new JCheckBox("Kerman");
 
 		sportLbl = new JLabel("Favorite Sport:");
-		favoriteSportList = new JList<Object>(Sport.values());
+		favoriteSportList = new JList<Sport>(Sport.values());
 		favoriteSportList.setSelectedIndex(0);
 
 		isEmp = new JCheckBox("Is Employee");

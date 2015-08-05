@@ -50,7 +50,6 @@ public class Controller {
 	}
 
 	private FormEvent convertPersonToFormEvent(Person p) {
-		// TODO Auto-generated method stub
 		String name = p.getName();
 		String family = p.getFamily();
 		Role role = p.getRole();
@@ -62,7 +61,6 @@ public class Controller {
 		Boolean isEmp = p.getIsEmp();
 		FormEvent e = new FormEvent(name, family, role, age, gender, city,
 				favSport, isEmp, salary);
-
 		return e;
 	}
 
