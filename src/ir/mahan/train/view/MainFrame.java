@@ -1,6 +1,8 @@
 package ir.mahan.train.view;
 
 import ir.mahan.train.Controller.Controller;
+import ir.mahan.train.model.ToolbarListener;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -27,6 +29,7 @@ public class MainFrame extends JFrame {
 	TextPanel textPanel;
 	TablePanel tablePanel;
 	FormPanel formPanel;
+	ToolBar toolbar;
 	JSplitPane splitPane;
 	JTabbedPane tabbedPane;
 	Controller controller;
@@ -55,6 +58,8 @@ public class MainFrame extends JFrame {
 		textPanel = new TextPanel();
 		tablePanel = new TablePanel();
 		formPanel = new FormPanel();
+		toolbar = new ToolBar();
+		this.getContentPane().add(toolbar,BorderLayout.NORTH);
 		tabbedPane = new JTabbedPane();
 		tabbedPane.add("Text Area", textPanel);
 		tabbedPane.add("Person DB", tablePanel);
@@ -78,6 +83,23 @@ public class MainFrame extends JFrame {
 					e1.printStackTrace();
 				}
 
+			}
+		});
+		
+		toolbar.setToolbarListener(new ToolbarListener() {
+			
+			@Override
+			public void saveEventOccured() {
+				// TODO Auto-generated method stub
+				controller.saveToDB(dbForm);
+			}
+			
+			@Override
+			public void refreshEventOccured() {
+				// TODO Auto-generated method stub
+				//list<FormEvent> dbForm= controller.loadFromDB();
+				//textPanel.setTextArea();
+				tablePanel.refresh();
 			}
 		});
 	}

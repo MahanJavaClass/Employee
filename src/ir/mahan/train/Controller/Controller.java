@@ -28,6 +28,21 @@ public class Controller {
 		db = new DataBase();
 	}
 
+	public void saveToDB(List<FormEvent> dbForm) {
+		for (FormEvent e : dbForm) {
+
+			person = ConvertFormEventToPerson(e);
+			db.addPerson(person);
+		}
+	}
+
+	public void connect() {
+	}
+
+	// public List<FormEvent> loadFromDB(){
+	//
+	//
+	// }
 	public void addPerson(FormEvent e) throws IOException {
 
 		person = ConvertFormEventToPerson(e);

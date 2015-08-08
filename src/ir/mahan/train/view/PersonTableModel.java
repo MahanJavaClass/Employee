@@ -1,5 +1,7 @@
 package ir.mahan.train.view;
 
+import ir.mahan.train.model.Gender;
+
 import java.util.List;
 
 import javax.swing.table.AbstractTableModel;
@@ -56,4 +58,41 @@ public class PersonTableModel extends AbstractTableModel {
 		return columnNames[column];
 	}
 
+	@Override
+	public boolean isCellEditable(int row, int col) {
+		// TODO Auto-generated method stub
+		switch (col) {
+		case 1:
+			return true;
+		case 4:
+			return true;
+		case 5:
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	@Override
+	public void setValueAt(Object value, int row, int col) {
+		// TODO Auto-generated method stub
+		if (db == null) {
+			return;
+		}
+		FormEvent p = (FormEvent) db.get(row);
+		switch (col) {
+		case 1:
+			p.setName((String) value);
+			break;
+		case 4:
+			p.setAge((String) value);
+			break;
+		case 5:
+			p.setGender((Gender) value);
+			break;
+		default:
+			return;
+
+		}
+	}
 }
