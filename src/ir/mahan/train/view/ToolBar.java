@@ -2,6 +2,7 @@ package ir.mahan.train.view;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.SQLException;
 
 import ir.mahan.train.model.ToolbarListener;
 
@@ -47,7 +48,12 @@ public class ToolBar extends JToolBar implements ActionListener {
 			toolbarListener.saveEventOccured();
 		}
 		else {
-			toolbarListener.refreshEventOccured();
+			try {
+				toolbarListener.refreshEventOccured();
+			} catch (Exception e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}
 		
 	}

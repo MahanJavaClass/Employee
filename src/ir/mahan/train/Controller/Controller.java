@@ -2,8 +2,10 @@ package ir.mahan.train.Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import ir.mahan.train.model.DataBase;
 import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.Person;
@@ -28,16 +30,26 @@ public class Controller {
 		db = new DataBase();
 	}
 
-	public void saveToDB(List<FormEvent> dbForm) {
-		for (FormEvent e : dbForm) {
-
-			person = ConvertFormEventToPerson(e);
-			db.addPerson(person);
+	public void saveToDB() {
+		try {
+			db.save();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
-
-	public void connect() {
+	
+	public List<FormEvent> load() throws Exception {
+		// TODO Auto-generated method stub
+		List<Person> people = db.load();
+		List<FormEvent> peopleLoaded = new ArrayList<FormEvent>();
+		for (Person p : people) {
+			FormEvent e = convertPersonToFormEvent(p);
+			peopleLoaded.add(e);
+		}
+		return peopleLoaded;
 	}
+
 
 	// public List<FormEvent> loadFromDB(){
 	//
@@ -80,7 +92,8 @@ public class Controller {
 	}
 
 	private Person ConvertFormEventToPerson(FormEvent e) {
-
+		
+		int ID = e.getID();
 		String name = e.getName();
 		String family = e.getFamily();
 		Role role = e.getRole();
@@ -90,7 +103,7 @@ public class Controller {
 		Gender gender = e.getGender();
 		String salary = e.getSalary();
 		Boolean isEmp = e.getIsEmp();
-		Person person = new Person(name, family, role, city, gender, age,
+		Person person = new Person(ID ,name, family, role, city, gender, age,
 				favSport, isEmp, salary);
 		return person;
 

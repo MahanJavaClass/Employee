@@ -1,5 +1,7 @@
 package ir.mahan.train.model;
 
+import ir.mahan.train.view.FormEvent;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -11,14 +13,20 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.SQLWarning;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 public class DataBase {
 
 	private List<Person> people;
 	Connection con;
+	Statement statement = null;
 	private int port;
 	private String user;
 	private String pass;
@@ -31,7 +39,6 @@ public class DataBase {
 		people.add(p);
 	}
 
-	@SuppressWarnings("unused")
 	private void deletePerson(int index) {
 		people.remove(index);
 	}
@@ -79,41 +86,104 @@ public class DataBase {
 			throw new Exception("driver Not Found");
 		}
 
-		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=c005_s01_n";
+		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
 		con = DriverManager.getConnection(connectionURL);
 		System.out.println("connected");
 	}
 
 	public void disConnect() throws Exception {
-		if (con != null)
-			return;
+		if (con != null){
+			
 		try {
 			con.close();
 			System.out.println("Disconnected");
 
 		} catch (SQLException e) {
 			throw new Exception("Could Not Disconnect...");
-		}
+		}}
 	}
 
-	public void save() throws SQLException {
-		String SQLCheckCommand = "select count(*) as count from person where id=?";
-		PreparedStatement checkstm = con.prepareStatement(SQLCheckCommand);
-		checkstm.setInt(1, 5);
-		ResultSet checkResult = checkstm.executeQuery();
-		checkResult.next();
-		int count = checkResult.getInt(1);
-		System.out.println(count);
+	public void save() throws Exception {
+		// String SQLCheckCommand =
+		// "select count(*) as count from person where id=?";
+		// PreparedStatement checkstm = con.prepareStatement(SQLCheckCommand);
+		// checkstm.setInt(1, 5);
+		// ResultSet checkResult = checkstm.executeQuery();
+		// checkResult.next();
+		// int count = checkResult.getInt(1);
+		// System.out.println(count);
+
+		List<Person> people = getPeopleList();
+		connect();
+		for (Person p : people) {
+
+			 int bit;
+			 if(p.getIsEmp())
+				bit = 1;
+			 else {
+				 bit = 0;
+			 }
+				 
+			
+			String query = "INSERT INTO G1.Person Values (" + p.getID() + ",'"
+					+ p.getName() + "','" + p.getFamily() + "','" + p.getGender()
+					+ "','" + p.getAge() + "','" + p.getRole() + "','"
+					+ p.getCity() + "','" + p.getFavoriteSport() + "',"
+					+ bit + ",'"
+					+p.getSalary() + "')";
+			
+			statement = con.createStatement();
+			statement.executeUpdate(query);
+			
+
+		}
+		disConnect();
 	}
 
-	public static void main(String[] args) {
-		DataBase db = new DataBase();
-		try {
-			db.connect();
-			db.save();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	public List<Person> load() throws Exception {
+
+		connect();
+		ArrayList<Person> persons = new ArrayList<Person>();
+		String query = "SELECT * FROM G1.Person ";
+		Statement stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery(query);
+		// Iterate through the data in the result set and display it.
+		while (rs.next()) {
+
+			int ID = rs.getInt("ID");
+			String name = rs.getString("FirstName");
+			String family = rs.getString("LastName");
+			String age = rs.getString("Age");
+			String city = rs.getString("City");
+			String gender =  rs.getString("Gender");
+			String role =  rs.getString("Category");
+			String favSport = rs.getString("Sport");
+			Boolean isEmp = rs.getBoolean("IsEmployee");
+			String salary = rs.getString("Salary");
+			
+			Role roleE ;
+			Gender genderE;
+			
+			
+			if(gender=="Female")
+				genderE = Gender.Female;
+			else 
+				genderE = Gender.Male;
+			
+			if(role == "staff")
+				roleE = Role.staff;
+			else if(role == "student")
+				roleE = Role.student;
+			else 
+				roleE = Role.teacher;
+
+			
+			Person p = new Person(ID, name, family, roleE, city, genderE, age, favSport, isEmp, salary);
+			persons.add(p);
+
 		}
+		disConnect();
+		return persons;
+
 	}
 }

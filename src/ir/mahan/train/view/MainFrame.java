@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
+import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 public class MainFrame extends JFrame {
 
@@ -91,15 +93,21 @@ public class MainFrame extends JFrame {
 			@Override
 			public void saveEventOccured() {
 				// TODO Auto-generated method stub
-				controller.saveToDB(dbForm);
+				controller.saveToDB();
 			}
 			
 			@Override
-			public void refreshEventOccured() {
+			public void refreshEventOccured() throws Exception {
 				// TODO Auto-generated method stub
 				//list<FormEvent> dbForm= controller.loadFromDB();
 				//textPanel.setTextArea();
 				tablePanel.refresh();
+				List<FormEvent> formEvents = controller.load();
+
+				for (FormEvent e : formEvents) {
+					textPanel.setTextArea(e);
+					dbForm.add(e);
+				}
 			}
 		});
 	}

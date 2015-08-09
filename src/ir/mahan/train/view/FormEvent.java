@@ -35,6 +35,9 @@ public class FormEvent implements Serializable {
 		this.salary = salary;
 	}
 
+	public int getID(){
+		return ID;
+	}
 	public String getName() {
 		return name;
 	}

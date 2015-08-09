@@ -5,6 +5,7 @@ import java.io.Serializable;
 public class Person implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	int ID;
 	String name;
 	String family;
 	Gender gender;
@@ -15,6 +16,9 @@ public class Person implements Serializable{
 	String salary;
 	Boolean isEmp;
 
+	public int getID(){
+		return ID;
+	}
 	public String getName() {
 		return name;
 	}
@@ -23,10 +27,11 @@ public class Person implements Serializable{
 		this.name = name;
 	}
 
-	public Person(String name, String family, Role role, String city,
+	public Person(int ID , String name, String family, Role role, String city,
 			Gender gender, String age, String favoriteSport,  Boolean isEmp ,String salary
 			) {
 		super();
+		this.ID = ID;
 		this.name = name;
 		this.family = family;
 		this.gender = gender;
