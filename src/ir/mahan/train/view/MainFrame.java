@@ -61,7 +61,7 @@ public class MainFrame extends JFrame {
 		tablePanel = new TablePanel();
 		formPanel = new FormPanel();
 		toolbar = new ToolBar();
-		this.getContentPane().add(toolbar,BorderLayout.NORTH);
+		this.getContentPane().add(toolbar, BorderLayout.NORTH);
 		tabbedPane = new JTabbedPane();
 		tabbedPane.add("Text Area", textPanel);
 		tabbedPane.add("Person DB", tablePanel);
@@ -87,20 +87,20 @@ public class MainFrame extends JFrame {
 
 			}
 		});
-		
+
 		toolbar.setToolbarListener(new ToolbarListener() {
-			
+
 			@Override
 			public void saveEventOccured() {
 				// TODO Auto-generated method stub
 				controller.saveToDB();
 			}
-			
+
 			@Override
 			public void refreshEventOccured() throws Exception {
 				// TODO Auto-generated method stub
-				//list<FormEvent> dbForm= controller.loadFromDB();
-				//textPanel.setTextArea();
+				// list<FormEvent> dbForm= controller.loadFromDB();
+				// textPanel.setTextArea();
 				tablePanel.refresh();
 				List<FormEvent> formEvents = controller.load();
 
