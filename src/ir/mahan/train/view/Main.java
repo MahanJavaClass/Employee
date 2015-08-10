@@ -1,4 +1,5 @@
 package ir.mahan.train.view;
+
 import javax.swing.SwingUtilities;
 
 public class Main {
@@ -8,8 +9,7 @@ public class Main {
 
 			@Override
 			public void run() {
-            new LoginFrame();
-				//new MainFrame("User Form");
+				new LoginFrame();
 			}
 		});
 	}

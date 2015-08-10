@@ -2,17 +2,14 @@ package ir.mahan.train.view;
 
 import ir.mahan.train.Controller.Controller;
 import ir.mahan.train.model.ToolbarListener;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -23,7 +20,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.KeyStroke;
-import javax.swing.text.StyledEditorKit.ForegroundAction;
 
 public class MainFrame extends JFrame {
 
@@ -37,9 +33,11 @@ public class MainFrame extends JFrame {
 	Controller controller;
 	JFileChooser fileChooser;
 	private List<FormEvent> dbForm;
+	String username;
 
-	public MainFrame(String title) {
+	public MainFrame(String title,String username) {
 		super(title);
+		this.username=username;
 		setView();
 		addComponent();
 		setJMenuBar(createMenu());
@@ -60,7 +58,7 @@ public class MainFrame extends JFrame {
 		textPanel = new TextPanel();
 		tablePanel = new TablePanel();
 		formPanel = new FormPanel();
-		toolbar = new ToolBar();
+		toolbar = new ToolBar(username);
 		this.getContentPane().add(toolbar, BorderLayout.NORTH);
 		tabbedPane = new JTabbedPane();
 		tabbedPane.add("Text Area", textPanel);
@@ -201,7 +199,7 @@ public class MainFrame extends JFrame {
 					try {
 						controller.SavePerson(selectedFile);
 					} catch (IOException e) {
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(MainFrame.this, "file does not exist.");
 					}
 				}
 			}

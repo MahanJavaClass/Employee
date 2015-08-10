@@ -2,10 +2,8 @@ package ir.mahan.train.Controller;
 
 import java.io.File;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import ir.mahan.train.model.DataBase;
 import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.Person;
@@ -180,5 +178,21 @@ public class Controller {
 	public void setIsEmp(Boolean isEmp) {
 		this.isEmp = isEmp;
 	}
+
+	public Boolean authenticate(String userName, String passString) {
+		Boolean success =false;
+		try {
+			 success = db.authenticate(userName, passString);	
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(success)
+			return true;
+			else return false;
+	}
+
+
+	
 
 }

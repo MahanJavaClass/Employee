@@ -1,7 +1,5 @@
 package ir.mahan.train.model;
 
-import ir.mahan.train.view.FormEvent;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,23 +11,16 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.SQLWarning;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class DataBase {
 
 	private List<Person> people;
 	Connection con;
 	Statement statement = null;
-	private int port;
-	private String user;
-	private String pass;
 
 	public DataBase() {
 		people = new ArrayList<>();
@@ -39,16 +30,24 @@ public class DataBase {
 		people.add(p);
 	}
 
+	@SuppressWarnings("unused")
 	private void deletePerson(int index) {
 		people.remove(index);
 	}
 
-	public void saveToFile(File file) throws IOException {
+	public void saveToFile(File file) throws IOException  {
 
-		FileOutputStream fileStream = new FileOutputStream(file);
-		ObjectOutputStream os = new ObjectOutputStream(fileStream);
+		FileOutputStream fileStream = null;
+		ObjectOutputStream os = null;
+
+		fileStream = new FileOutputStream(file);
+
+		os = new ObjectOutputStream(fileStream);
+
 		Person[] persons = people.toArray(new Person[people.size()]);
+
 		os.writeObject(persons);
+
 		os.close();
 
 	}
@@ -92,15 +91,16 @@ public class DataBase {
 	}
 
 	public void disConnect() throws Exception {
-		if (con != null){
-			
-		try {
-			con.close();
-			System.out.println("Disconnected");
+		if (con != null) {
 
-		} catch (SQLException e) {
-			throw new Exception("Could Not Disconnect...");
-		}}
+			try {
+				con.close();
+				System.out.println("Disconnected");
+
+			} catch (SQLException e) {
+				throw new Exception("Could Not Disconnect...");
+			}
+		}
 	}
 
 	public void save() throws Exception {
@@ -117,24 +117,21 @@ public class DataBase {
 		connect();
 		for (Person p : people) {
 
-			 int bit;
-			 if(p.getIsEmp())
+			int bit;
+			if (p.getIsEmp())
 				bit = 1;
-			 else {
-				 bit = 0;
-			 }
-				 
-			
+			else {
+				bit = 0;
+			}
+
 			String query = "INSERT INTO G1.Person Values (" + p.getID() + ",'"
-					+ p.getName() + "','" + p.getFamily() + "','" + p.getGender()
-					+ "','" + p.getAge() + "','" + p.getRole() + "','"
-					+ p.getCity() + "','" + p.getFavoriteSport() + "',"
-					+ bit + ",'"
-					+p.getSalary() + "')";
-			
+					+ p.getName() + "','" + p.getFamily() + "','"
+					+ p.getGender() + "','" + p.getAge() + "','" + p.getRole()
+					+ "','" + p.getCity() + "','" + p.getFavoriteSport() + "',"
+					+ bit + ",'" + p.getSalary() + "')";
+
 			statement = con.createStatement();
 			statement.executeUpdate(query);
-			
 
 		}
 		disConnect();
@@ -155,35 +152,55 @@ public class DataBase {
 			String family = rs.getString("LastName");
 			String age = rs.getString("Age");
 			String city = rs.getString("City");
-			String gender =  rs.getString("Gender");
-			String role =  rs.getString("Category");
+			String gender = rs.getString("Gender");
+			String role = rs.getString("Category");
 			String favSport = rs.getString("Sport");
 			Boolean isEmp = rs.getBoolean("IsEmployee");
 			String salary = rs.getString("Salary");
-			
-			Role roleE ;
+
+			Role roleE;
 			Gender genderE;
-			
-			
-			if(gender=="Female")
+
+			if (gender == "Female")
 				genderE = Gender.Female;
-			else 
+			else
 				genderE = Gender.Male;
-			
-			if(role == "staff")
+
+			if (role == "staff")
 				roleE = Role.staff;
-			else if(role == "student")
+			else if (role == "student")
 				roleE = Role.student;
-			else 
+			else
 				roleE = Role.teacher;
 
-			
-			Person p = new Person(ID, name, family, roleE, city, genderE, age, favSport, isEmp, salary);
+			Person p = new Person(ID, name, family, roleE, city, genderE, age,
+					favSport, isEmp, salary);
 			persons.add(p);
 
 		}
 		disConnect();
 		return persons;
 
+	}
+
+	public boolean authenticate(String userName, String password)
+			throws Exception {
+		connect();
+		String query = "select username from [User] where username=? and password=?";
+		PreparedStatement checkstm = con.prepareStatement(query);
+		checkstm.setString(1, userName);
+		checkstm.setString(2, password);
+		ResultSet rs = checkstm.executeQuery();
+		
+		if (rs.next()){
+			disConnect();
+			return true;
+		}
+		else{
+			disConnect();
+			return false;
+		}
+			
+		
 	}
 }
