@@ -284,8 +284,8 @@ public class FormPanel extends JPanel implements ActionListener {
 		else {
 
 			FormEvent e = new FormEvent(nameTxt.getText(), familyTxt.getText(),
+					(Gender) genderCB.getSelectedItem(),getSelectedAge(),
 					(Role) roleCB.getSelectedItem(), getSelectedCities(),
-					(Gender) genderCB.getSelectedItem(), getSelectedAge(),
 					getSelectedSports(), isEmp.isSelected(),
 					salaryTxt.getText());
 			formListener.formEventOccured(e);

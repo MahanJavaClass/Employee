@@ -27,8 +27,8 @@ public class Person implements Serializable{
 		this.name = name;
 	}
 
-	public Person(int ID , String name, String family, Role role, String city,
-			Gender gender, String age, String favoriteSport,  Boolean isEmp ,String salary
+	public Person(int ID , String name, String family, Gender gender, String age,
+			Role role, String city, String favoriteSport,  Boolean isEmp ,String salary
 			) {
 		super();
 		this.ID = ID;

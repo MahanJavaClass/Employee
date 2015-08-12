@@ -1,5 +1,7 @@
 package ir.mahan.train.view;
 
+import java.util.ArrayList;
+
 import javax.swing.SwingUtilities;
 
 public class Main {

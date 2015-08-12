@@ -77,7 +77,7 @@ public class Controller {
 		Gender gender = p.getGender();
 		String salary = p.getSalary();
 		Boolean isEmp = p.getIsEmp();
-		FormEvent e = new FormEvent(name, family, role, age, gender, city,
+		FormEvent e = new FormEvent(name, family, gender, age, role, city,
 				favSport, isEmp, salary);
 		return e;
 	}
@@ -94,7 +94,7 @@ public class Controller {
 		Gender gender = e.getGender();
 		String salary = e.getSalary();
 		Boolean isEmp = e.getIsEmp();
-		Person person = new Person(ID, name, family, role, city, gender, age,
+		Person person = new Person(ID, name, family, gender, age, role, city,
 				favSport, isEmp, salary);
 		return person;
 

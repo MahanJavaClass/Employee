@@ -19,8 +19,8 @@ public class FormEvent implements Serializable {
 	String salary;
 	Boolean isEmp;
 
-	public FormEvent(String name, String family, Role role, String age,
-			Gender gender, String city, String favSport, Boolean isEmp,
+	public FormEvent(String name, String family, Gender gender, String age,
+			Role role, String city, String favSport, Boolean isEmp,
 			String salary) {
 		super();
 		this.ID = count++;

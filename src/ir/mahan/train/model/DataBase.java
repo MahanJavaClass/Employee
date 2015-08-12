@@ -84,11 +84,11 @@ public class DataBase {
 				bit = 0;
 			}
 
-			String query = "INSERT INTO G1.Person Values (" + p.getID() + ",'"
-					+ p.getName() + "','" + p.getFamily() + "','"
-					+ p.getGender() + "','" + p.getAge() + "','" + p.getRole()
-					+ "','" + p.getCity() + "','" + p.getFavoriteSport() + "',"
-					+ bit + ",'" + p.getSalary() + "')";
+			String query = "INSERT INTO G1.Person Values (" + p.getName()
+					+ "','" + p.getFamily() + "','" + p.getGender() + "','"
+					+ p.getAge() + "','" + p.getRole() + "','" + p.getCity()
+					+ "','" + p.getFavoriteSport() + "'," + bit + ",'"
+					+ p.getSalary() + "')";
 
 			statement = con.createStatement();
 			statement.executeUpdate(query);
@@ -133,7 +133,7 @@ public class DataBase {
 			else
 				roleE = Role.teacher;
 
-			Person p = new Person(ID, name, family, roleE, city, genderE, age,
+			Person p = new Person(ID, name, family, genderE, age, roleE, city,
 					favSport, isEmp, salary);
 			persons.add(p);
 		}
@@ -162,15 +162,19 @@ public class DataBase {
 	}
 
 	public void connect() throws Exception {
-		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-		} catch (ClassNotFoundException e) {
-			throw new Exception("driver Not Found");
+		if (con != null) {
+			return;
 		}
+			try {
+				Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 
-		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
-		con = DriverManager.getConnection(connectionURL);
+			} catch (ClassNotFoundException e) {
+				throw new Exception("driver Not Found");
+			}
+
+			String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
+			con = DriverManager.getConnection(connectionURL);
+		
 	}
 
 	public void disConnect() throws Exception {
