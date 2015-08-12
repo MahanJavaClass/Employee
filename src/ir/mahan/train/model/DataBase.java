@@ -41,12 +41,8 @@ public class DataBase {
 
 	public void saveToFile(File file) throws IOException {
 
-		FileOutputStream fileStream = null;
-		ObjectOutputStream os = null;
-
-		fileStream = new FileOutputStream(file);
-
-		os = new ObjectOutputStream(fileStream);
+		FileOutputStream fileStream = new FileOutputStream(file);
+		ObjectOutputStream os = new ObjectOutputStream(fileStream);
 
 		Person[] persons = people.toArray(new Person[people.size()]);
 
