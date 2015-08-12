@@ -26,6 +26,10 @@ public class DataBase {
 		people = new ArrayList<>();
 	}
 
+	public List<Person> getPeopleList() {
+		return people;
+	}
+
 	public void addPerson(Person p) {
 		people.add(p);
 	}
@@ -35,7 +39,7 @@ public class DataBase {
 		people.remove(index);
 	}
 
-	public void saveToFile(File file) throws IOException  {
+	public void saveToFile(File file) throws IOException {
 
 		FileOutputStream fileStream = null;
 		ObjectOutputStream os = null;
@@ -53,7 +57,6 @@ public class DataBase {
 	}
 
 	public List<Person> loadFromFile(File file) throws IOException {
-		// TODO Auto-generated method stub
 
 		FileInputStream fileStream = new FileInputStream(file);
 		ObjectInputStream os = new ObjectInputStream(fileStream);
@@ -63,7 +66,7 @@ public class DataBase {
 			people.addAll(Arrays.asList(persons));
 
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			System.out.println("File Not Found");
 		}
 		people.toArray(new Person[people.size()]);
 		os.close();
@@ -71,50 +74,11 @@ public class DataBase {
 
 	}
 
-	public List<Person> getPeopleList() {
-		return people;
-	}
-
-	public void connect() throws Exception {
-		if (con != null)
-			return;
-		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-		} catch (ClassNotFoundException e) {
-			throw new Exception("driver Not Found");
-		}
-
-		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
-		con = DriverManager.getConnection(connectionURL);
-		System.out.println("connected");
-	}
-
-	public void disConnect() throws Exception {
-		if (con != null) {
-
-			try {
-				con.close();
-				System.out.println("Disconnected");
-
-			} catch (SQLException e) {
-				throw new Exception("Could Not Disconnect...");
-			}
-		}
-	}
-
 	public void save() throws Exception {
-		// String SQLCheckCommand =
-		// "select count(*) as count from person where id=?";
-		// PreparedStatement checkstm = con.prepareStatement(SQLCheckCommand);
-		// checkstm.setInt(1, 5);
-		// ResultSet checkResult = checkstm.executeQuery();
-		// checkResult.next();
-		// int count = checkResult.getInt(1);
-		// System.out.println(count);
 
 		List<Person> people = getPeopleList();
 		connect();
+
 		for (Person p : people) {
 
 			int bit;
@@ -144,7 +108,7 @@ public class DataBase {
 		String query = "SELECT * FROM G1.Person ";
 		Statement stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
-		// Iterate through the data in the result set and display it.
+
 		while (rs.next()) {
 
 			int ID = rs.getInt("ID");
@@ -191,16 +155,39 @@ public class DataBase {
 		checkstm.setString(1, userName);
 		checkstm.setString(2, password);
 		ResultSet rs = checkstm.executeQuery();
-		
-		if (rs.next()){
+
+		if (rs.next()) {
 			disConnect();
 			return true;
-		}
-		else{
+		} else {
 			disConnect();
 			return false;
 		}
-			
-		
+
 	}
+
+	public void connect() throws Exception {
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+		} catch (ClassNotFoundException e) {
+			throw new Exception("driver Not Found");
+		}
+
+		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
+		con = DriverManager.getConnection(connectionURL);
+	}
+
+	public void disConnect() throws Exception {
+		if (con != null) {
+
+			try {
+				con.close();
+
+			} catch (SQLException e) {
+				throw new Exception("Could Not Disconnect...");
+			}
+		}
+	}
+
 }

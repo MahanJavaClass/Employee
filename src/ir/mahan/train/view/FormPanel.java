@@ -4,14 +4,12 @@ import ir.mahan.train.model.Role;
 import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.Sport;
 import ir.mahan.train.model.Validate;
-
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
@@ -24,7 +22,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
-import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 
 public class FormPanel extends JPanel implements ActionListener {

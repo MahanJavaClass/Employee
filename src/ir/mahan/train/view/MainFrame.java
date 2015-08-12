@@ -1,7 +1,7 @@
 package ir.mahan.train.view;
 
 import ir.mahan.train.Controller.Controller;
-import ir.mahan.train.model.ToolbarListener;
+
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -35,9 +36,9 @@ public class MainFrame extends JFrame {
 	private List<FormEvent> dbForm;
 	String username;
 
-	public MainFrame(String title,String username) {
+	public MainFrame(String title, String username) {
 		super(title);
-		this.username=username;
+		this.username = username;
 		setView();
 		addComponent();
 		setJMenuBar(createMenu());
@@ -90,15 +91,11 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void saveEventOccured() {
-				// TODO Auto-generated method stub
 				controller.saveToDB();
 			}
 
 			@Override
 			public void refreshEventOccured() throws Exception {
-				// TODO Auto-generated method stub
-				// list<FormEvent> dbForm= controller.loadFromDB();
-				// textPanel.setTextArea();
 				tablePanel.refresh();
 				List<FormEvent> formEvents = controller.load();
 
@@ -199,7 +196,8 @@ public class MainFrame extends JFrame {
 					try {
 						controller.SavePerson(selectedFile);
 					} catch (IOException e) {
-						JOptionPane.showMessageDialog(MainFrame.this, "file does not exist.");
+						JOptionPane.showMessageDialog(MainFrame.this,
+								"file does not exist.");
 					}
 				}
 			}

@@ -60,7 +60,6 @@ public class PersonTableModel extends AbstractTableModel {
 
 	@Override
 	public boolean isCellEditable(int row, int col) {
-		// TODO Auto-generated method stub
 		switch (col) {
 		case 1:
 			return true;
@@ -75,7 +74,6 @@ public class PersonTableModel extends AbstractTableModel {
 
 	@Override
 	public void setValueAt(Object value, int row, int col) {
-		// TODO Auto-generated method stub
 		if (db == null) {
 			return;
 		}

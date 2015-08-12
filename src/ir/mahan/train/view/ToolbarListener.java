@@ -1,9 +1,8 @@
-package ir.mahan.train.model;
-
-import java.sql.SQLException;
+package ir.mahan.train.view;
 
 public interface ToolbarListener {
 
 	void saveEventOccured();
+
 	void refreshEventOccured() throws Exception;
 }

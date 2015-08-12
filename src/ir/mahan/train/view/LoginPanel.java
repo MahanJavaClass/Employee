@@ -15,11 +15,12 @@ import javax.swing.border.Border;
 
 public class LoginPanel extends JPanel implements ActionListener {
 
+	private static final long serialVersionUID = 1L;
 	JLabel userNameLbl, passLbl;
 	JTextField userNameTxt;
 	JPasswordField passPassword;
 	JButton loginBtn;
-	
+
 	Controller controller;
 	String userName;
 	char[] password;
@@ -64,11 +65,10 @@ public class LoginPanel extends JPanel implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent ae) {
-		// TODO Auto-generated method stub
 		controller = new Controller();
 		userName = userNameTxt.getText();
 		password = passPassword.getPassword();
-		String passString =new String(password);
+		String passString = new String(password);
 		Boolean success;
 		try {
 
@@ -79,7 +79,6 @@ public class LoginPanel extends JPanel implements ActionListener {
 			} else
 				JOptionPane.showMessageDialog(this, "Login Failed.");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
