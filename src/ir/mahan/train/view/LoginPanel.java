@@ -57,7 +57,7 @@ public class LoginPanel extends JPanel implements ActionListener {
 		add(passPassword);
 
 		loginBtn = new JButton("login");
-		loginBtn.setBounds(100, 120, 80, 25);
+		loginBtn.setBounds(140, 120, 80, 25);
 		add(loginBtn);
 		loginBtn.addActionListener(this);
 

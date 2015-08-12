@@ -23,6 +23,7 @@ public class LoginFrame extends JFrame {
 		this.setSize(400, 250);
 		this.setVisible(true);
 		this.setLayout(new BorderLayout());
+		this.setLocation(600, 300);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
 }
