@@ -140,7 +140,6 @@ public class DataBase {
 			Person p = new Person(ID, name, family, roleE, city, genderE, age,
 					favSport, isEmp, salary);
 			persons.add(p);
-
 		}
 		disConnect();
 		return persons;

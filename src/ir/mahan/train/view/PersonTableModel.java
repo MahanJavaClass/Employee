@@ -40,11 +40,11 @@ public class PersonTableModel extends AbstractTableModel {
 		case 3:
 			return person.getRole();
 		case 4:
-			return person.getCity();
+			return person.getAge();
 		case 5:
 			return person.getGender();
 		case 6:
-			return person.getAge();
+			return person.getCity();
 		case 7:
 			return person.getFavoriteSport();
 		case 8:
