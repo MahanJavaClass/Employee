@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.swing.JFileChooser;
-
 import ir.mahan.train.model.DataBase;
 import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.Person;
@@ -31,6 +28,31 @@ public class Controller {
 		db = new DataBase();
 	}
 
+	public void saveToDB() {
+		try {
+			db.save();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public List<FormEvent> load() throws Exception {
+		// TODO Auto-generated method stub
+		List<Person> people = db.load();
+		List<FormEvent> peopleLoaded = new ArrayList<FormEvent>();
+		for (Person p : people) {
+			FormEvent e = convertPersonToFormEvent(p);
+			peopleLoaded.add(e);
+		}
+		return peopleLoaded;
+	}
+
+
+	// public List<FormEvent> loadFromDB(){
+	//
+	//
+	// }
 	public void addPerson(FormEvent e) throws IOException {
 
 		person = ConvertFormEventToPerson(e);
@@ -53,7 +75,6 @@ public class Controller {
 	}
 
 	private FormEvent convertPersonToFormEvent(Person p) {
-		// TODO Auto-generated method stub
 		String name = p.getName();
 		String family = p.getFamily();
 		Role role = p.getRole();
@@ -65,12 +86,12 @@ public class Controller {
 		Boolean isEmp = p.getIsEmp();
 		FormEvent e = new FormEvent(name, family, role, age, gender, city,
 				favSport, isEmp, salary);
-
 		return e;
 	}
 
 	private Person ConvertFormEventToPerson(FormEvent e) {
-
+		
+		int ID = e.getID();
 		String name = e.getName();
 		String family = e.getFamily();
 		Role role = e.getRole();
@@ -80,7 +101,7 @@ public class Controller {
 		Gender gender = e.getGender();
 		String salary = e.getSalary();
 		Boolean isEmp = e.getIsEmp();
-		Person person = new Person(name, family, role, city, gender, age,
+		Person person = new Person(ID ,name, family, role, city, gender, age,
 				favSport, isEmp, salary);
 		return person;
 
@@ -157,5 +178,21 @@ public class Controller {
 	public void setIsEmp(Boolean isEmp) {
 		this.isEmp = isEmp;
 	}
+
+	public Boolean authenticate(String userName, String passString) {
+		Boolean success =false;
+		try {
+			 success = db.authenticate(userName, passString);	
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		if(success)
+			return true;
+			else return false;
+	}
+
+
+	
 
 }

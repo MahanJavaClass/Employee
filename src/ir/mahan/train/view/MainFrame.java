@@ -1,7 +1,7 @@
 package ir.mahan.train.view;
 
 import ir.mahan.train.Controller.Controller;
-
+import ir.mahan.train.model.ToolbarListener;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -24,17 +23,21 @@ import javax.swing.KeyStroke;
 
 public class MainFrame extends JFrame {
 
+	private static final long serialVersionUID = 1L;
 	TextPanel textPanel;
 	TablePanel tablePanel;
 	FormPanel formPanel;
+	ToolBar toolbar;
 	JSplitPane splitPane;
 	JTabbedPane tabbedPane;
 	Controller controller;
 	JFileChooser fileChooser;
 	private List<FormEvent> dbForm;
+	String username;
 
-	public MainFrame(String title) {
+	public MainFrame(String title,String username) {
 		super(title);
+		this.username=username;
 		setView();
 		addComponent();
 		setJMenuBar(createMenu());
@@ -55,6 +58,8 @@ public class MainFrame extends JFrame {
 		textPanel = new TextPanel();
 		tablePanel = new TablePanel();
 		formPanel = new FormPanel();
+		toolbar = new ToolBar(username);
+		this.getContentPane().add(toolbar, BorderLayout.NORTH);
 		tabbedPane = new JTabbedPane();
 		tabbedPane.add("Text Area", textPanel);
 		tabbedPane.add("Person DB", tablePanel);
@@ -78,6 +83,29 @@ public class MainFrame extends JFrame {
 					e1.printStackTrace();
 				}
 
+			}
+		});
+
+		toolbar.setToolbarListener(new ToolbarListener() {
+
+			@Override
+			public void saveEventOccured() {
+				// TODO Auto-generated method stub
+				controller.saveToDB();
+			}
+
+			@Override
+			public void refreshEventOccured() throws Exception {
+				// TODO Auto-generated method stub
+				// list<FormEvent> dbForm= controller.loadFromDB();
+				// textPanel.setTextArea();
+				tablePanel.refresh();
+				List<FormEvent> formEvents = controller.load();
+
+				for (FormEvent e : formEvents) {
+					textPanel.setTextArea(e);
+					dbForm.add(e);
+				}
 			}
 		});
 	}
@@ -143,10 +171,14 @@ public class MainFrame extends JFrame {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (fileChooser.showOpenDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+					dbForm.clear();
+					FormEvent.count = 0;
+					textPanel.textArea.setText("");
 					File selectedFile = fileChooser.getSelectedFile();
 					try {
 						List<FormEvent> formEvents = controller
 								.loadPeople(selectedFile);
+
 						for (FormEvent e : formEvents) {
 							textPanel.setTextArea(e);
 							dbForm.add(e);
@@ -154,7 +186,6 @@ public class MainFrame extends JFrame {
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
-
 				}
 			}
 		});
@@ -168,7 +199,7 @@ public class MainFrame extends JFrame {
 					try {
 						controller.SavePerson(selectedFile);
 					} catch (IOException e) {
-						e.printStackTrace();
+						JOptionPane.showMessageDialog(MainFrame.this, "file does not exist.");
 					}
 				}
 			}
