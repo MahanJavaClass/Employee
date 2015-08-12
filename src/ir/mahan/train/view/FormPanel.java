@@ -24,6 +24,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.border.Border;
 
 public class FormPanel extends JPanel implements ActionListener {
@@ -100,7 +101,6 @@ public class FormPanel extends JPanel implements ActionListener {
 
 		sportLbl = new JLabel("Favorite Sport:");
 		favoriteSportList = new JList<Sport>(Sport.values());
-		favoriteSportList.setSelectedIndex(0);
 
 		isEmp = new JCheckBox("Is Employee");
 		isEmp.addActionListener(this);
@@ -289,8 +289,8 @@ public class FormPanel extends JPanel implements ActionListener {
 			FormEvent e = new FormEvent(nameTxt.getText(), familyTxt.getText(),
 					(Role) roleCB.getSelectedItem(), getSelectedCities(),
 					(Gender) genderCB.getSelectedItem(), getSelectedAge(),
-					favoriteSportList.getSelectedValue().toString(),
-					isEmp.isSelected(), salaryTxt.getText());
+					getSelectedSports(), isEmp.isSelected(),
+					salaryTxt.getText());
 			formListener.formEventOccured(e);
 		}
 
@@ -327,6 +327,20 @@ public class FormPanel extends JPanel implements ActionListener {
 		String category = "";
 		category = roleCB.getSelectedItem().toString();
 		return category;
+	}
+
+	public String getSelectedSports() {
+		int[] selectedIx = favoriteSportList.getSelectedIndices();
+		String selectedSports = "";
+
+		for (int i = 0; i < selectedIx.length; i++) {
+
+			selectedSports = selectedSports
+					+ ","
+					+ favoriteSportList.getModel().getElementAt(selectedIx[i])
+							.toString();
+		}
+		return selectedSports;
 	}
 
 }
