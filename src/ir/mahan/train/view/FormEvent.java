@@ -22,7 +22,6 @@ public class FormEvent implements Serializable {
 	public FormEvent(String name, String family, Gender gender, String age,
 			Role role, String city, String favSport, Boolean isEmp,
 			String salary) {
-		super();
 		this.ID = count++;
 		this.name = name;
 		this.family = family;

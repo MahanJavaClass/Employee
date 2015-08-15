@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 public class DataBase {
 
 	private List<Person> people;
@@ -83,18 +85,40 @@ public class DataBase {
 			else {
 				bit = 0;
 			}
+			Boolean isExist = isExist(p.getID());
+			String query;
+			if (isExist){
+				 query = "UPDATE G1.Person set FirstName='"+ p.getName() + "',LastName='" + p.getFamily() + "',Gender='"
+						+ p.getGender() + "',Age='" + p.getAge() + "',Category='" + p.getRole()
+						+ "',City='" + p.getCity() + "',Sport='" + p.getFavoriteSport() + "',IsEmployee="
+						+ bit + ",Salary='" + p.getSalary() + "' WHERE ID="+p.getID();
+				
+			}
+			else{
+				 query = "INSERT INTO G1.Person Values (" + p.getID() + ",'"
+						+ p.getName() + "','" + p.getFamily() + "','"
+						+ p.getGender() + "','" + p.getAge() + "','" + p.getRole()
+						+ "','" + p.getCity() + "','" + p.getFavoriteSport() + "',"
+						+ bit + ",'" + p.getSalary() + "')";
+			}
 
-			String query = "INSERT INTO G1.Person Values (" + p.getID() + ",'"
-					+ p.getName() + "','" + p.getFamily() + "','"
-					+ p.getGender() + "','" + p.getAge() + "','" + p.getRole()
-					+ "','" + p.getCity() + "','" + p.getFavoriteSport() + "',"
-					+ bit + ",'" + p.getSalary() + "')";
 
 			statement = con.createStatement();
 			statement.executeUpdate(query);
 
 		}
 		disConnect();
+	}
+
+	private Boolean isExist(int id) throws Exception {
+
+		String query = "select * from G1.person where ID="+id;
+		Statement stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery(query);
+		if(rs.next())
+			return true;
+		else
+			return false;
 	}
 
 	public List<Person> load() throws Exception {

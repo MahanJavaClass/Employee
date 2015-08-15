@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
 import ir.mahan.train.model.DataBase;
 import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.Person;
@@ -14,20 +15,14 @@ public class Controller {
 	DataBase db;
 	Person person;
 	File selectedFile;
-	String name;
-	String family;
-	Gender gender;
-	String city;
-	Role role;
-	String age;
-	String favoriteSport;
-	String salary;
-	Boolean isEmp;
 
 	public Controller() {
 		db = new DataBase();
 	}
 
+	
+	
+	
 	public void saveToDB() {
 		try {
 			db.save();
@@ -46,6 +41,11 @@ public class Controller {
 		return peopleLoaded;
 	}
 
+	
+	
+	
+	
+	
 	public void SavePerson(File file) throws IOException {
 
 		db.saveToFile(file);
@@ -67,6 +67,11 @@ public class Controller {
 		db.addPerson(person);
 	}
 
+	
+	
+	
+	
+	
 	private FormEvent convertPersonToFormEvent(Person p) {
 		String name = p.getName();
 		String family = p.getFamily();
@@ -85,6 +90,7 @@ public class Controller {
 	private Person ConvertFormEventToPerson(FormEvent e) {
 
 		int ID = e.getID();
+		
 		String name = e.getName();
 		String family = e.getFamily();
 		Role role = e.getRole();
@@ -100,78 +106,6 @@ public class Controller {
 
 	}
 
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getFamily() {
-		return family;
-	}
-
-	public void setFamily(String family) {
-		this.family = family;
-	}
-
-	public Gender getGender() {
-		return gender;
-	}
-
-	public void setGender(Gender gender) {
-		this.gender = gender;
-	}
-
-	public String getCity() {
-		return city;
-	}
-
-	public void setCity(String city) {
-		this.city = city;
-	}
-
-	public Role getRole() {
-		return role;
-	}
-
-	public void setRole(Role role) {
-		this.role = role;
-	}
-
-	public String getAge() {
-		return age;
-	}
-
-	public void setAge(String age) {
-		this.age = age;
-	}
-
-	public String getFavoriteSport() {
-		return favoriteSport;
-	}
-
-	public void setFavoriteSport(String favoriteSport) {
-		this.favoriteSport = favoriteSport;
-	}
-
-	public String getSalary() {
-		return salary;
-	}
-
-	public void setSalary(String salary) {
-		this.salary = salary;
-	}
-
-	public Boolean getIsEmp() {
-		return isEmp;
-	}
-
-	public void setIsEmp(Boolean isEmp) {
-		this.isEmp = isEmp;
-	}
-
 	public Boolean authenticate(String userName, String passString) {
 		Boolean success = false;
 		try {
@@ -184,5 +118,6 @@ public class Controller {
 		else
 			return false;
 	}
+
 
 }
