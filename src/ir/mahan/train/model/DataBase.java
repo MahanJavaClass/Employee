@@ -125,7 +125,7 @@ public class DataBase {
 
 		connect();
 		ArrayList<Person> persons = new ArrayList<Person>();
-		String query = "SELECT * FROM G1.Person ";
+		String query = "SELECT * FROM G1.Person ORDER BY ID ";
 		Statement stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
 

@@ -4,7 +4,9 @@ import ir.mahan.train.model.Gender;
 
 import java.util.List;
 
+import javax.swing.event.TableModelEvent;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.DefaultTableModel;
 
 public class PersonTableModel extends AbstractTableModel {
 
@@ -14,7 +16,9 @@ public class PersonTableModel extends AbstractTableModel {
 			"Gender", "City", "Favorite Sports", "Salary" };
 
 	public void setData(List<FormEvent> db) {
+		
 		this.db = db;
+		System.out.println("***"+db.size());
 	}
 
 	@Override

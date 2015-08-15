@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 public class FormEvent implements Serializable {
 	private static final long serialVersionUID = 1L;
-	public static int count;
+	public static int count = 0;
 	int ID;
 	String name;
 	String family;
@@ -19,10 +19,10 @@ public class FormEvent implements Serializable {
 	String salary;
 	Boolean isEmp;
 
-	public FormEvent(String name, String family, Gender gender, String age,
+	public FormEvent(int ID, String name, String family, Gender gender, String age,
 			Role role, String city, String favSport, Boolean isEmp,
 			String salary) {
-		this.ID = count++;
+		 setID(ID);
 		this.name = name;
 		this.family = family;
 		this.gender = gender;
@@ -32,6 +32,12 @@ public class FormEvent implements Serializable {
 		this.favoriteSport = favSport;
 		this.isEmp = isEmp;
 		this.salary = salary;
+	}
+
+	private void setID(int ID) {
+		// TODO Auto-generated method stub
+		this.ID=ID;
+		count++;
 	}
 
 	public int getID(){

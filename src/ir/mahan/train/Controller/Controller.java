@@ -73,6 +73,7 @@ public class Controller {
 	
 	
 	private FormEvent convertPersonToFormEvent(Person p) {
+		int ID = p.getID();
 		String name = p.getName();
 		String family = p.getFamily();
 		Role role = p.getRole();
@@ -82,7 +83,7 @@ public class Controller {
 		Gender gender = p.getGender();
 		String salary = p.getSalary();
 		Boolean isEmp = p.getIsEmp();
-		FormEvent e = new FormEvent(name, family, gender, age, role, city,
+		FormEvent e = new FormEvent(ID,name, family, gender, age, role, city,
 				favSport, isEmp, salary);
 		return e;
 	}
