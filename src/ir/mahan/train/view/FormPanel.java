@@ -24,7 +24,7 @@ import javax.swing.JRadioButton;
 import javax.swing.JTextField;
 import javax.swing.border.Border;
 
-public class FormPanel extends JPanel implements ActionListener {
+public class FormPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	JLabel nameLbl;
@@ -70,7 +70,14 @@ public class FormPanel extends JPanel implements ActionListener {
 		initializeFormComponents();
 		layoutComponent();
 		groupButton();
-		submitBtn.addActionListener(this);
+		submitBtn.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				submitAction();
+
+			}
+		});
 	}
 
 	private void initializeFormComponents() {
@@ -100,7 +107,14 @@ public class FormPanel extends JPanel implements ActionListener {
 		favoriteSportList = new JList<Sport>(Sport.values());
 
 		isEmp = new JCheckBox("Is Employee");
-		isEmp.addActionListener(this);
+		isEmp.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				isEmployeeAction();
+
+			}
+		});
 
 		salaryLbl = new JLabel("Salary");
 		salaryTxt = new JTextField();
@@ -246,14 +260,6 @@ public class FormPanel extends JPanel implements ActionListener {
 
 	}
 
-	public void actionPerformed(ActionEvent event) {
-		if (event.getSource().equals(submitBtn))
-			submitAction();
-		if (event.getSource().equals(isEmp))
-			isEmployeeAction();
-
-	}
-
 	private void isEmployeeAction() {
 
 		if (isEmp.isSelected())
@@ -268,6 +274,7 @@ public class FormPanel extends JPanel implements ActionListener {
 		Validate validate;
 		String error = "";
 		validate = new Validate();
+
 		if (!validate.stringValidate(nameTxt.getText())) {
 			error += "Name invalid!\n";
 		}
@@ -282,12 +289,12 @@ public class FormPanel extends JPanel implements ActionListener {
 			JOptionPane.showMessageDialog(null, error, "خطا",
 					JOptionPane.ERROR_MESSAGE);
 		else {
-			
-			FormEvent e = new FormEvent(FormEvent.count++, nameTxt.getText(), familyTxt.getText(),
-					(Gender) genderCB.getSelectedItem(),getSelectedAge(),
-					(Role) roleCB.getSelectedItem(), getSelectedCities(),
-					getSelectedSports(), isEmp.isSelected(),
-					salaryTxt.getText());
+
+			FormEvent e = new FormEvent(FormEvent.count++, nameTxt.getText(),
+					familyTxt.getText(), (Gender) genderCB.getSelectedItem(),
+					getSelectedAge(), (Role) roleCB.getSelectedItem(),
+					getSelectedCities(), getSelectedSports(),
+					isEmp.isSelected(), salaryTxt.getText());
 			formListener.formEventOccured(e);
 		}
 

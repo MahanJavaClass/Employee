@@ -1,9 +1,7 @@
 package ir.mahan.train.model;
-
 import java.io.Serializable;
 
-public class Person implements Serializable{
-
+public class Person implements Serializable {
 	private static final long serialVersionUID = 1L;
 	int ID;
 	String name;
@@ -16,20 +14,23 @@ public class Person implements Serializable{
 	String salary;
 	Boolean isEmp;
 
-	public int getID(){
+	public int getID() {
 		return ID;
 	}
+
 	public String getName() {
+
 		return name;
+
 	}
 
 	public void setName(String name) {
 		this.name = name;
 	}
 
-	public Person(int ID , String name, String family, Gender gender, String age,
-			Role role, String city, String favoriteSport,  Boolean isEmp ,String salary
-			) {
+	public Person(int ID, String name, String family, Gender gender,
+			String age, Role role, String city, String favoriteSport,
+			Boolean isEmp, String salary) {
 		super();
 		this.ID = ID;
 		this.name = name;
@@ -41,9 +42,8 @@ public class Person implements Serializable{
 		this.favoriteSport = favoriteSport;
 		this.salary = salary;
 		this.isEmp = isEmp;
-	
-	}
 
+	}
 
 	public String getFamily() {
 		return family;
