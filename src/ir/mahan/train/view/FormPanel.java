@@ -290,12 +290,13 @@ public class FormPanel extends JPanel {
 					JOptionPane.ERROR_MESSAGE);
 		else {
 
-			FormEvent e = new FormEvent(FormEvent.count++, nameTxt.getText(),
+			FormEvent e = new FormEvent(FormEvent.count, nameTxt.getText(),
 					familyTxt.getText(), (Gender) genderCB.getSelectedItem(),
 					getSelectedAge(), (Role) roleCB.getSelectedItem(),
 					getSelectedCities(), getSelectedSports(),
 					isEmp.isSelected(), salaryTxt.getText());
 			formListener.formEventOccured(e);
+			
 		}
 
 	}
