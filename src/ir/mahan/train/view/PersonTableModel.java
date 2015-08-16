@@ -16,9 +16,7 @@ public class PersonTableModel extends AbstractTableModel {
 			"Gender", "City", "Favorite Sports", "Salary" };
 
 	public void setData(List<FormEvent> db) {
-		
 		this.db = db;
-		System.out.println("***"+db.size());
 	}
 
 	@Override
