@@ -12,6 +12,10 @@ public class PersonTableModel extends AbstractTableModel {
 
 	private static final long serialVersionUID = 1L;
 	private List<FormEvent> db;
+	public List<FormEvent> getDb() {
+		return db;
+	}
+
 	String[] columnNames = { "ID", "First Name", "Last Name", "Role", "Age",
 			"Gender", "City", "Favorite Sports", "Salary" };
 

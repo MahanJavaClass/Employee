@@ -2,8 +2,10 @@ package ir.mahan.train.Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import ir.mahan.train.model.DataBase;
 import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.Person;
@@ -19,9 +21,6 @@ public class Controller {
 		db = new DataBase();
 	}
 
-	
-	
-	
 	public void saveToDB() {
 		try {
 			db.save();
@@ -40,11 +39,6 @@ public class Controller {
 		return peopleLoaded;
 	}
 
-	
-	
-	
-	
-	
 	public void SavePerson(File file) throws IOException {
 
 		db.saveToFile(file);
@@ -66,11 +60,6 @@ public class Controller {
 		db.addPerson(person);
 	}
 
-	
-	
-	
-	
-	
 	private FormEvent convertPersonToFormEvent(Person p) {
 		int ID = p.getID();
 		String name = p.getName();
@@ -82,7 +71,7 @@ public class Controller {
 		Gender gender = p.getGender();
 		String salary = p.getSalary();
 		Boolean isEmp = p.getIsEmp();
-		FormEvent e = new FormEvent(ID,name, family, gender, age, role, city,
+		FormEvent e = new FormEvent(ID, name, family, gender, age, role, city,
 				favSport, isEmp, salary);
 		return e;
 	}
@@ -90,7 +79,7 @@ public class Controller {
 	private Person ConvertFormEventToPerson(FormEvent e) {
 
 		int ID = e.getID();
-		
+
 		String name = e.getName();
 		String family = e.getFamily();
 		Role role = e.getRole();
@@ -119,5 +108,12 @@ public class Controller {
 			return false;
 	}
 
+	public void deletePerson(int row) throws Exception {
+		try {
+			db.deletePerson(row);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
