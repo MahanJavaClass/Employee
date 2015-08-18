@@ -69,9 +69,9 @@ public class PersonTableModel extends AbstractTableModel {
 		switch (col) {
 		case 1:
 			return true;
-		case 4:
+		case 2:
 			return true;
-		case 5:
+		case 8:
 			return true;
 		default:
 			return false;
@@ -88,11 +88,11 @@ public class PersonTableModel extends AbstractTableModel {
 		case 1:
 			p.setName((String) value);
 			break;
-		case 4:
-			p.setAge((String) value);
+		case 2:
+			p.setFamily((String) value);
 			break;
-		case 5:
-			p.setGender((Gender) value);
+		case 8:
+			p.setSalary((String) value);
 			break;
 		default:
 			return;

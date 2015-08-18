@@ -36,10 +36,13 @@ public class DataBase {
 
 	public void deletePerson(int index) throws Exception {
 		connect();
-		String query;
-		query="delete from [JavaTraining].[G1].[Person] where ID="+index;
-		statement = con.createStatement();
-		statement.executeUpdate(query);
+		int id ;
+		id = people.get(index).getID();
+		people.remove(index);
+		String removeQuery = "delete from G1.person where id=?";
+		PreparedStatement preparedStatement = con.prepareStatement(removeQuery);
+		preparedStatement.setInt(1,id);
+		preparedStatement.executeUpdate();
 		disConnect();
 	}
 

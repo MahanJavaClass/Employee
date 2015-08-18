@@ -78,17 +78,44 @@ public class MainFrame extends JFrame {
 			public void formEventOccured(FormEvent e) {
 
 				try {
-					controller.addPerson(e);
 					dbForm.add(e);
 					textPanel.setTextArea(e);
 					tablePanel.refresh();
+					controller.addPerson(e);
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
 
 			}
-		});
+		});		
 
+		tablePanel.setPersonTableListener(new PersonTableListener() {
+			
+			@Override
+			public void rowSave(int row) {
+				// TODO Auto-generated method stub
+				
+				
+			}
+			
+			@Override
+			public void rowRefresh(int row) {
+				// TODO Auto-generated method stub
+				controller.saveToDB();
+			}
+			
+			@Override
+			public void rowDeleted(int row) {
+				// TODO Auto-generated method stub
+				try {
+					controller.deletePerson(row);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				dbForm.remove(row);
+			}
+		});
 		toolbar.setToolbarListener(new ToolbarListener() {
 
 			@Override
@@ -98,13 +125,20 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void refreshEventOccured() throws Exception {
-				tablePanel.refresh();
+				
+				if(dbForm.size()!= 0){
+					int lastID = dbForm.size()-1;
+					FormEvent.count=dbForm.get(lastID).getID();
+					dbForm.clear();
+					textPanel.textArea.setText("");
+					
+				}
 				List<FormEvent> formEvents = controller.load();
-
 				for (FormEvent e : formEvents) {
 					textPanel.setTextArea(e);
 					dbForm.add(e);
 				}
+				tablePanel.refresh();
 			}
 		});
 	}
