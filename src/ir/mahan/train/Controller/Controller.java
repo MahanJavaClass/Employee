@@ -21,16 +21,29 @@ public class Controller {
 		db = new DataBase();
 	}
 
+	public void addPerson(FormEvent e) throws IOException {
+		
+		person = ConvertFormEventToPerson(e);
+		db.addPerson(person);
+	}
+	public void deletePerson(int row) throws Exception {
+		try {
+			db.deletePerson(row);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	/// ---------------------- DataBase -----------------------
 	public void saveToDB() {
 		try {
-			db.save();
+			db.setDB();
 		} catch (Exception e) {
 			System.out.println("No connection found");
 		}
 	}
 
-	public List<FormEvent> load() throws Exception {
-		List<Person> people = db.load();
+	public List<FormEvent> loadFromDB() throws Exception {
+		List<Person> people = db.loadFromDB();
 		List<FormEvent> peopleLoaded = new ArrayList<FormEvent>();
 		for (Person p : people) {
 			FormEvent e = convertPersonToFormEvent(p);
@@ -39,12 +52,14 @@ public class Controller {
 		return peopleLoaded;
 	}
 
-	public void SavePerson(File file) throws IOException {
-
+	/// ---------------------- File --------------------------
+	
+	public void SaveToFile(File file) throws IOException {
+		
 		db.saveToFile(file);
 	}
 
-	public List<FormEvent> loadPeople(File file) throws IOException {
+	public List<FormEvent> loadFromFile(File file) throws IOException {
 
 		List<Person> people = db.loadFromFile(file);
 		List<FormEvent> formEvents = new ArrayList<>();
@@ -54,12 +69,8 @@ public class Controller {
 		return formEvents;
 	}
 
-	public void addPerson(FormEvent e) throws IOException {
-
-		person = ConvertFormEventToPerson(e);
-		db.addPerson(person);
-	}
-
+	/// ---------------------- Convert -----------------------
+	
 	private FormEvent convertPersonToFormEvent(Person p) {
 		int ID = p.getID();
 		String name = p.getName();
@@ -94,7 +105,8 @@ public class Controller {
 		return person;
 
 	}
-
+	/// ---------------------- authenticate -----------------------
+	
 	public Boolean authenticate(String userName, String passString) {
 		Boolean success = false;
 		try {
@@ -108,12 +120,6 @@ public class Controller {
 			return false;
 	}
 
-	public void deletePerson(int row) throws Exception {
-		try {
-			db.deletePerson(row);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
+
 
 }

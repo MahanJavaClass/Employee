@@ -37,7 +37,6 @@ public class MainFrame extends JFrame {
 	String username;
 
 	public MainFrame(String title, String username) {
-		super(title);
 		this.username = username;
 		setView();
 		addComponent();
@@ -57,7 +56,6 @@ public class MainFrame extends JFrame {
 	}
 
 	private void addComponent() {
-
 		textPanel = new TextPanel();
 		tablePanel = new TablePanel();
 		formPanel = new FormPanel();
@@ -87,37 +85,34 @@ public class MainFrame extends JFrame {
 				}
 
 			}
-		});		
+		});
 
 		tablePanel.setPersonTableListener(new PersonTableListener() {
-			
+			// to do
 			@Override
 			public void rowSave(int row) {
 				// TODO Auto-generated method stub
-				
-				
+
 			}
-			
+
+			// to do
 			@Override
 			public void rowRefresh(int row) {
 				// TODO Auto-generated method stub
 				controller.saveToDB();
 			}
-			
+
 			@Override
 			public void rowDeleted(int row) {
-				// TODO Auto-generated method stub
 				try {
 					controller.deletePerson(row);
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				dbForm.remove(row);
 			}
 		});
 		toolbar.setToolbarListener(new ToolbarListener() {
-
 			@Override
 			public void saveEventOccured() {
 				controller.saveToDB();
@@ -125,20 +120,17 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void refreshEventOccured() throws Exception {
-				
-				if(dbForm.size()!= 0){
-					int lastID = dbForm.size()-1;
-					FormEvent.count=dbForm.get(lastID).getID();
-					dbForm.clear();
-					textPanel.textArea.setText("");
-					
-				}
-				List<FormEvent> formEvents = controller.load();
-				for (FormEvent e : formEvents) {
+
+				dbForm = controller.loadFromDB();
+				for (FormEvent e : dbForm) {
 					textPanel.setTextArea(e);
-					dbForm.add(e);
 				}
+				tablePanel.setData(dbForm);
 				tablePanel.refresh();
+				if (dbForm.size() > 0) {
+					int dbformSize = dbForm.size() - 1;
+					FormEvent.count = dbForm.get(dbformSize).getID() + 1;
+				}
 			}
 		});
 	}
@@ -210,7 +202,7 @@ public class MainFrame extends JFrame {
 					File selectedFile = fileChooser.getSelectedFile();
 					try {
 						List<FormEvent> formEvents = controller
-								.loadPeople(selectedFile);
+								.loadFromFile(selectedFile);
 
 						for (FormEvent e : formEvents) {
 							textPanel.setTextArea(e);
@@ -230,7 +222,7 @@ public class MainFrame extends JFrame {
 				if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
 					File selectedFile = fileChooser.getSelectedFile();
 					try {
-						controller.SavePerson(selectedFile);
+						controller.SaveToFile(selectedFile);
 					} catch (IOException e) {
 						JOptionPane.showMessageDialog(MainFrame.this,
 								"file does not exist.");

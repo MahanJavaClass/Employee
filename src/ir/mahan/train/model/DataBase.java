@@ -25,6 +25,30 @@ public class DataBase {
 	public DataBase() {
 		people = new ArrayList<>();
 	}
+	
+	public void connect() throws Exception {
+		try {
+			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
+
+		} catch (ClassNotFoundException e) {
+			throw new Exception("driver Not Found");
+		}
+
+		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
+		con = DriverManager.getConnection(connectionURL);
+	}
+
+	public void disConnect() throws Exception {
+		if (con != null) {
+
+			try {
+				con.close();
+
+			} catch (SQLException e) {
+				throw new Exception("Could Not Disconnect...");
+			}
+		}
+	}
 
 	public List<Person> getPeopleList() {
 		return people;
@@ -34,31 +58,8 @@ public class DataBase {
 		people.add(p);
 	}
 
-	public void deletePerson(int index) throws Exception {
-		connect();
-		int id ;
-		id = people.get(index).getID();
-		people.remove(index);
-		String removeQuery = "delete from G1.person where id=?";
-		PreparedStatement preparedStatement = con.prepareStatement(removeQuery);
-		preparedStatement.setInt(1,id);
-		preparedStatement.executeUpdate();
-		disConnect();
-	}
 
-	public void saveToFile(File file) throws IOException {
-
-		FileOutputStream fileStream = new FileOutputStream(file);
-		ObjectOutputStream os = new ObjectOutputStream(fileStream);
-
-		Person[] persons = people.toArray(new Person[people.size()]);
-
-		os.writeObject(persons);
-
-		os.close();
-
-	}
-
+///---------------------- File -----------------------------------
 	public List<Person> loadFromFile(File file) throws IOException {
 
 		FileInputStream fileStream = new FileInputStream(file);
@@ -77,48 +78,80 @@ public class DataBase {
 
 	}
 
-	public void save() throws Exception {
+	public void saveToFile(File file) throws IOException {
 
+		FileOutputStream fileStream = new FileOutputStream(file);
+		ObjectOutputStream os = new ObjectOutputStream(fileStream);
+
+		Person[] persons = people.toArray(new Person[people.size()]);
+
+		os.writeObject(persons);
+
+		os.close();
+
+	}
+
+	
+///---------------------- DataBase -------------------------------
+	
+	public void deletePerson(int index) throws Exception {
 		connect();
-
+		int id;
+		id = people.get(index).getID();
+		people.remove(index);
+		String removeQuery = "delete from G1.person where id=?";
+		PreparedStatement preparedStatement = con.prepareStatement(removeQuery);
+		preparedStatement.setInt(1, id);
+		preparedStatement.executeUpdate();
+		disConnect();
+	}
+	
+	public void setDB() throws Exception {
+		connect();
 		for (Person p : people) {
-
-			int bit;
-			if (p.getIsEmp())
-				bit = 1;
-			else {
-				bit = 0;
-			}
-			
-			Boolean isExist = isExist(p.getID());
-			String query;
+			Boolean isExist = isPersonExist(p.getID());
 			if (isExist) {
-				query = "UPDATE G1.Person set FirstName='" + p.getName()
-						+ "',LastName='" + p.getFamily() + "',Gender='"
-						+ p.getGender() + "',Age='" + p.getAge()
-						+ "',Category='" + p.getRole() + "',City='"
-						+ p.getCity() + "',Sport='" + p.getFavoriteSport()
-						+ "',IsEmployee=" + bit + ",Salary='" + p.getSalary()
-						+ "' WHERE ID=" + p.getID();
+				UpdateDB(p);
 
 			} else {
-				query = "INSERT INTO G1.Person Values (" + p.getID() + ",'"
-						+ p.getName() + "','" + p.getFamily() + "','"
-						+ p.getGender() + "','" + p.getAge() + "','"
-						+ p.getRole() + "','" + p.getCity() + "','"
-						+ p.getFavoriteSport() + "'," + bit + ",'"
-						+ p.getSalary() + "')";
+				saveDB(p);
 			}
-
-			statement = con.createStatement();
-			statement.executeUpdate(query);
-
 		}
 		disConnect();
 	}
 
-	private Boolean isExist(int id) throws Exception {
+	public void saveDB(Person p) {
+		String query;
+		query = "INSERT INTO G1.Person Values (" + p.getID() + ",'"
+				+ p.getName() + "','" + p.getFamily() + "','" + p.getGender()
+				+ "','" + p.getAge() + "','" + p.getRole() + "','"
+				+ p.getCity() + "','" + p.getFavoriteSport() + "',"
+				+ isEmployee(p) + ",'" + p.getSalary() + "')";
 
+		try {
+			statement = con.createStatement();
+			statement.executeUpdate(query);
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void UpdateDB(Person p) throws Exception {
+
+		String query;
+		query = "UPDATE G1.Person set FirstName='" + p.getName()
+				+ "',LastName='" + p.getFamily() + "',Gender='" + p.getGender()
+				+ "',Age='" + p.getAge() + "',Category='" + p.getRole()
+				+ "',City='" + p.getCity() + "',Sport='" + p.getFavoriteSport()
+				+ "',IsEmployee=" + isEmployee(p) + ",Salary='" + p.getSalary()
+				+ "' WHERE ID=" + p.getID();
+		statement = con.createStatement();
+		statement.executeUpdate(query);
+	}
+
+	private Boolean isPersonExist(int id) throws Exception {
 		String query = "select * from G1.person where ID=" + id;
 		Statement stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
@@ -128,8 +161,15 @@ public class DataBase {
 			return false;
 	}
 
-	public List<Person> load() throws Exception {
+	public int isEmployee(Person p) {
+		if (p.getIsEmp())
+			return 1;
+		else {
+			return 0;
+		}
+	}
 
+	public List<Person> loadFromDB() throws Exception {
 		connect();
 		ArrayList<Person> persons = new ArrayList<Person>();
 		String query = "SELECT * FROM G1.Person ORDER BY ID ";
@@ -152,7 +192,7 @@ public class DataBase {
 			Role roleE;
 			Gender genderE;
 
-			if (gender == "Female")
+			if (gender.equals("Female"))
 				genderE = Gender.Female;
 			else
 				genderE = Gender.Male;
@@ -191,30 +231,6 @@ public class DataBase {
 			return false;
 		}
 
-	}
-
-	public void connect() throws Exception {
-		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-		} catch (ClassNotFoundException e) {
-			throw new Exception("driver Not Found");
-		}
-
-		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
-		con = DriverManager.getConnection(connectionURL);
-	}
-
-	public void disConnect() throws Exception {
-		if (con != null) {
-
-			try {
-				con.close();
-
-			} catch (SQLException e) {
-				throw new Exception("Could Not Disconnect...");
-			}
-		}
 	}
 
 }

@@ -2,11 +2,9 @@ package ir.mahan.train.view;
 
 import ir.mahan.train.model.Role;
 import ir.mahan.train.model.Gender;
-
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;

@@ -1,35 +1,37 @@
 package ir.mahan.train.view;
 
-import ir.mahan.train.Controller.Controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
-import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
-public class LoginPanel extends JPanel implements ActionListener {
+public class LoginPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	JLabel userNameLbl, passLbl;
 	JTextField userNameTxt;
 	JPasswordField passPassword;
 	JButton loginBtn;
-
-	Controller controller;
-	String userName;
-	char[] password;
+	ActionLoginListener actionLoginListener;
+	KeyLoginListener keyLoginListener;
 
 	public LoginPanel() {
 		setLayout(null);
 		setFormBorder();
 		layoutComponent();
+	}
 
+	public void setKeyLoginListener(KeyLoginListener keyLoginListener) {
+		this.keyLoginListener = keyLoginListener;
+	}
+
+	public void setActionLoginListener(ActionLoginListener loginListener) {
+		this.actionLoginListener = loginListener;
 	}
 
 	private void setFormBorder() {
@@ -55,33 +57,18 @@ public class LoginPanel extends JPanel implements ActionListener {
 		passPassword = new JPasswordField(20);
 		passPassword.setBounds(130, 70, 160, 25);
 		add(passPassword);
+		passPassword.addKeyListener(keyLoginListener);
 
 		loginBtn = new JButton("login");
 		loginBtn.setBounds(140, 120, 80, 25);
 		add(loginBtn);
-		loginBtn.addActionListener(this);
+		loginBtn.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				actionLoginListener.login();
+
+			}
+		});
 
 	}
-
-	@Override
-	public void actionPerformed(ActionEvent ae) {
-		controller = new Controller();
-		userName = userNameTxt.getText();
-		password = passPassword.getPassword();
-		String passString = new String(password);
-		Boolean success;
-		try {
-
-			success = controller.authenticate(userName, passString);
-			if (success) {
-				SwingUtilities.getWindowAncestor(this).dispose();
-				new MainFrame("User Form", userName);
-			} else
-				JOptionPane.showMessageDialog(this, "Login Failed.");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-	}
-
 }

@@ -19,10 +19,10 @@ public class FormEvent implements Serializable {
 	String salary;
 	Boolean isEmp;
 
-	public FormEvent(int ID, String name, String family, Gender gender, String age,
-			Role role, String city, String favSport, Boolean isEmp,
+	public FormEvent(int ID, String name, String family, Gender gender,
+			String age, Role role, String city, String favSport, Boolean isEmp,
 			String salary) {
-		 setID(ID);
+		this.ID = ID;
 		this.name = name;
 		this.family = family;
 		this.gender = gender;
@@ -34,14 +34,10 @@ public class FormEvent implements Serializable {
 		this.salary = salary;
 	}
 
-	private void setID(int ID) {
-		this.ID=ID;
-		count++;
-	}
-
-	public int getID(){
+	public int getID() {
 		return ID;
 	}
+
 	public String getName() {
 		return name;
 	}

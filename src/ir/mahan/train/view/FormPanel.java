@@ -57,7 +57,6 @@ public class FormPanel extends JPanel {
 
 	private FormListener formListener;
 
-
 	public void setformListener(FormListener iformListener) {
 		this.formListener = iformListener;
 	}
@@ -290,16 +289,13 @@ public class FormPanel extends JPanel {
 			JOptionPane.showMessageDialog(null, error, "خطا",
 					JOptionPane.ERROR_MESSAGE);
 		else {
-
-			FormEvent e = new FormEvent(FormEvent.count, nameTxt.getText(),
+			FormEvent e = new FormEvent(FormEvent.count++, nameTxt.getText(),
 					familyTxt.getText(), (Gender) genderCB.getSelectedItem(),
 					getSelectedAge(), (Role) roleCB.getSelectedItem(),
 					getSelectedCities(), getSelectedSports(),
 					isEmp.isSelected(), salaryTxt.getText());
 			formListener.formEventOccured(e);
-			
 		}
-
 	}
 
 	private void groupButton() {
