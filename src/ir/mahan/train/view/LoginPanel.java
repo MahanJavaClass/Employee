@@ -18,16 +18,11 @@ public class LoginPanel extends JPanel {
 	JPasswordField passPassword;
 	JButton loginBtn;
 	ActionLoginListener actionLoginListener;
-	KeyLoginListener keyLoginListener;
 
 	public LoginPanel() {
 		setLayout(null);
 		setFormBorder();
 		layoutComponent();
-	}
-
-	public void setKeyLoginListener(KeyLoginListener keyLoginListener) {
-		this.keyLoginListener = keyLoginListener;
 	}
 
 	public void setActionLoginListener(ActionLoginListener loginListener) {
@@ -57,7 +52,6 @@ public class LoginPanel extends JPanel {
 		passPassword = new JPasswordField(20);
 		passPassword.setBounds(130, 70, 160, 25);
 		add(passPassword);
-		passPassword.addKeyListener(keyLoginListener);
 
 		loginBtn = new JButton("login");
 		loginBtn.setBounds(140, 120, 80, 25);

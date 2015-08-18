@@ -4,8 +4,6 @@ import ir.mahan.train.Controller.Controller;
 import ir.mahan.train.model.User;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 
 public class LoginFrame extends JDialog {
 
@@ -21,18 +19,35 @@ public class LoginFrame extends JDialog {
 		loginPanel.setActionLoginListener(new ActionLoginListener() {
 			@Override
 			public void login() {
-				loginToForm();
+				controller = new Controller();
+				user = new User();
+				user.setUserName(loginPanel.userNameTxt.getText());
+				user.setPassword(loginPanel.passPassword.getPassword());
+				String passString = new String(user.getPassword());
+				Boolean success;
+				try {
+					success = controller.authenticate(user.getUserName(),
+							passString);
+					if (success) {
+						SwingUtilities.getWindowAncestor(loginPanel).dispose();
+						SwingUtilities.invokeLater(new Runnable() {
+							@Override
+							public void run() {
+								new MainFrame("User Form", user.getUserName());
+
+							}
+						});
+
+					} else
+						JOptionPane.showMessageDialog(null, "Login Failed");
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
 			}
 		});
 		// to do
-		loginPanel.setKeyLoginListener(new KeyLoginListener() {
-			@Override
-			public void keyPressed(KeyEvent arg0) {
-				loginToForm();
-			}
-
-		});
+		this.getRootPane().setDefaultButton(loginPanel.loginBtn);
 	}
 
 	private void setView() {
@@ -48,29 +63,4 @@ public class LoginFrame extends JDialog {
 		this.getContentPane().add(loginPanel);
 	}
 
-	void loginToForm() {
-		controller = new Controller();
-		user = new User();
-		user.setUserName(loginPanel.userNameTxt.getText());
-		user.setPassword(loginPanel.passPassword.getPassword());
-		String passString = new String(user.getPassword());
-		Boolean success;
-		try {
-			success = controller.authenticate(user.getUserName(), passString);
-			if (success) {
-				SwingUtilities.getWindowAncestor(loginPanel).dispose();
-				SwingUtilities.invokeLater(new Runnable() {
-					@Override
-					public void run() {
-						new MainFrame("User Form", user.getUserName());
-
-					}
-				});
-
-			} else
-				JOptionPane.showMessageDialog(null, "Login Failed");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 }

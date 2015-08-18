@@ -50,7 +50,6 @@ public class MainFrame extends JFrame {
 		this.setSize(940, 500);
 		this.setVisible(true);
 		this.setLayout(new BorderLayout());
-		this.setResizable(false);
 		this.setLocation(400, 200);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 	}
@@ -249,3 +248,5 @@ public class MainFrame extends JFrame {
 
 	}
 }
+
+
