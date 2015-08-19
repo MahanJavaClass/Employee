@@ -1,6 +1,7 @@
 package ir.mahan.train.view;
 
 import ir.mahan.train.Controller.Controller;
+import ir.mahan.train.model.Person;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -31,12 +32,13 @@ public class MainFrame extends JFrame {
 	ToolBar toolbar;
 	JSplitPane splitPane;
 	JTabbedPane tabbedPane;
-	Controller controller;
 	JFileChooser fileChooser;
 	private List<FormEvent> dbForm;
 	String username;
+	Controller controller;
 
-	public MainFrame(String title, String username) {
+	public MainFrame(String title, String username, Controller controller) {
+		this.controller = controller;
 		this.username = username;
 		setView();
 		addComponent();
@@ -68,9 +70,7 @@ public class MainFrame extends JFrame {
 		splitPane.setOneTouchExpandable(true);
 		this.getContentPane().add(splitPane, BorderLayout.CENTER);
 		createMenu();
-		controller = new Controller();
 		formPanel.setformListener(new FormListener() {
-
 			@Override
 			public void formEventOccured(FormEvent e) {
 
@@ -82,27 +82,33 @@ public class MainFrame extends JFrame {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
-
 			}
 		});
 
 		tablePanel.setPersonTableListener(new PersonTableListener() {
-			// to do
 			@Override
-			public void rowSave(int row) {
-				// TODO Auto-generated method stub
-
-			}
-
-			// to do
-			@Override
-			public void rowRefresh(int row) {
-				// TODO Auto-generated method stub
-				controller.saveToDB();
+			public void saveRow(int row) {
+				FormEvent e = dbForm.get(row);
+				controller.updatePerson(e);
 			}
 
 			@Override
-			public void rowDeleted(int row) {
+			public void refreshRow() {
+				try {
+					dbForm = controller.loadFromDB();
+					tablePanel.setData(dbForm);
+					tablePanel.refresh();
+					if (dbForm.size() > 0) {
+						int dbformSize = dbForm.size() - 1;
+						FormEvent.count = dbForm.get(dbformSize).getID() + 1;
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			@Override
+			public void deleteRow(int row) {
 				try {
 					controller.deletePerson(row);
 				} catch (Exception e) {
@@ -207,6 +213,7 @@ public class MainFrame extends JFrame {
 							textPanel.setTextArea(e);
 							dbForm.add(e);
 						}
+						tablePanel.refresh();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
@@ -230,7 +237,6 @@ public class MainFrame extends JFrame {
 			}
 		});
 
-		this.setJMenuBar(menuBar);
 
 		exitMenuItem.addActionListener(new ActionListener() {
 			@Override
@@ -245,8 +251,5 @@ public class MainFrame extends JFrame {
 		});
 
 		return menuBar;
-
 	}
 }
-
-

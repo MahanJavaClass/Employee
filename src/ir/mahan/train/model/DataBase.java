@@ -25,7 +25,7 @@ public class DataBase {
 	public DataBase() {
 		people = new ArrayList<>();
 	}
-	
+
 	public void connect() throws Exception {
 		try {
 			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -58,24 +58,25 @@ public class DataBase {
 		people.add(p);
 	}
 
-
-///---------------------- File -----------------------------------
-	public List<Person> loadFromFile(File file) throws IOException {
-
+	// /---------------------- File -----------------------------------
+	public List<Person> loadFromFile(File file){
+		try{
 		FileInputStream fileStream = new FileInputStream(file);
 		ObjectInputStream os = new ObjectInputStream(fileStream);
-		try {
-			Person[] persons = (Person[]) os.readObject();
-			people.clear();
-			people.addAll(Arrays.asList(persons));
-
-		} catch (ClassNotFoundException e) {
-			System.out.println("File Not Found");
-		}
+		Person[] persons = (Person[]) os.readObject();
+		people.clear();
+		people.addAll(Arrays.asList(persons));
 		people.toArray(new Person[people.size()]);
 		os.close();
+		
+		}
+		catch(IOException e){
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return people;
-
 	}
 
 	public void saveToFile(File file) throws IOException {
@@ -91,9 +92,8 @@ public class DataBase {
 
 	}
 
-	
-///---------------------- DataBase -------------------------------
-	
+	// /---------------------- DataBase -------------------------------
+	// /Right Click
 	public void deletePerson(int index) throws Exception {
 		connect();
 		int id;
@@ -105,13 +105,20 @@ public class DataBase {
 		preparedStatement.executeUpdate();
 		disConnect();
 	}
-	
+
+	// /Right Click
+	public void updatePerson(Person newPerson) throws Exception {
+		connect();
+		updateDB(newPerson);
+		disConnect();
+	}
+
 	public void setDB() throws Exception {
 		connect();
 		for (Person p : people) {
 			Boolean isExist = isPersonExist(p.getID());
 			if (isExist) {
-				UpdateDB(p);
+				updateDB(p);
 
 			} else {
 				saveDB(p);
@@ -138,7 +145,7 @@ public class DataBase {
 
 	}
 
-	public void UpdateDB(Person p) throws Exception {
+	public void updateDB(Person p) throws Exception {
 
 		String query;
 		query = "UPDATE G1.Person set FirstName='" + p.getName()
@@ -197,9 +204,9 @@ public class DataBase {
 			else
 				genderE = Gender.Male;
 
-			if (role == "staff")
+			if (role.equals("staff"))
 				roleE = Role.staff;
-			else if (role == "student")
+			else if (role.equals("student"))
 				roleE = Role.student;
 			else
 				roleE = Role.teacher;
@@ -217,20 +224,23 @@ public class DataBase {
 	public boolean authenticate(String userName, String password)
 			throws Exception {
 		connect();
-		String query = "select username from [User] where username=? and password=?";
-		PreparedStatement checkstm = con.prepareStatement(query);
-		checkstm.setString(1, userName);
-		checkstm.setString(2, password);
-		ResultSet rs = checkstm.executeQuery();
-
-		if (rs.next()) {
+		try {
+			String query = "select username from [User] where username=? and password=?";
+			PreparedStatement checkstm = con.prepareStatement(query);
+			checkstm.setString(1, userName);
+			checkstm.setString(2, password);
+			ResultSet rs = checkstm.executeQuery();
+			if (rs.next()) {
+				disConnect();
+				return true;
+			} else {
+				disConnect();
+				return false;
+			}
+		} catch (Exception e) {
 			disConnect();
-			return true;
-		} else {
-			disConnect();
-			return false;
+			throw e;
 		}
-
 	}
 
 }

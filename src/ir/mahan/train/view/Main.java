@@ -1,5 +1,7 @@
 package ir.mahan.train.view;
 
+import ir.mahan.train.Controller.Controller;
+
 import javax.swing.SwingUtilities;
 
 public class Main {
@@ -7,8 +9,8 @@ public class Main {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				new LoginFrame();
-
+				Controller controller = new Controller();
+				new LoginFrame(controller);
 			}
 		});
 	}

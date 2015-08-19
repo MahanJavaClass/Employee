@@ -18,14 +18,18 @@ public class TablePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
 	JTable table;
+	JPopupMenu popupMenu;
 	private PersonTableModel personTableModel;
+
+	public PersonTableModel getPersonTableModel() {
+		return personTableModel;
+	}
+
 	private PersonTableListener personTableListener;
 
 	public void setPersonTableListener(PersonTableListener personTableListener) {
 		this.personTableListener = personTableListener;
 	}
-
-	JPopupMenu popupMenu;
 
 	public TablePanel() {
 		setLayout(new BorderLayout());
@@ -49,38 +53,32 @@ public class TablePanel extends JPanel {
 		popupMenu.add(refreshItem);
 
 		saveItem.addActionListener(new ActionListener() {
-
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				int row = table.getSelectedRow();
 				if (personTableListener != null) {
-					personTableListener.rowSave(row);
-					personTableModel.fireTableDataChanged();
+					personTableListener.saveRow(row);
 				}
-
 			}
-
 		});
+
 		deleteItem.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				int row = table.getSelectedRow();
 				if (personTableListener != null) {
-					personTableListener.rowDeleted(row);
+					personTableListener.deleteRow(row);
 					personTableModel.fireTableDataChanged();
 				}
-
 			}
-
 		});
-		refreshItem.addActionListener(new ActionListener() {
 
+		refreshItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int row = table.getSelectedRow();
 				if (personTableListener != null) {
-					personTableListener.rowRefresh(row);
+					personTableListener.refreshRow();
 					personTableModel.fireTableDataChanged();
 				}
 
@@ -98,7 +96,6 @@ public class TablePanel extends JPanel {
 				}
 			}
 		});
-
 	}
 
 	public void setData(List<FormEvent> db) {

@@ -11,15 +11,13 @@ public class LoginFrame extends JDialog {
 
 	LoginPanel loginPanel;
 	User user;
-	Controller controller;
 
-	LoginFrame() {
+	LoginFrame(final Controller controller) {
 		setView();
 		addComponent();
 		loginPanel.setActionLoginListener(new ActionLoginListener() {
 			@Override
 			public void login() {
-				controller = new Controller();
 				user = new User();
 				user.setUserName(loginPanel.userNameTxt.getText());
 				user.setPassword(loginPanel.passPassword.getPassword());
@@ -33,7 +31,8 @@ public class LoginFrame extends JDialog {
 						SwingUtilities.invokeLater(new Runnable() {
 							@Override
 							public void run() {
-								new MainFrame("User Form", user.getUserName());
+								new MainFrame("User Form", user.getUserName(),
+										controller);
 
 							}
 						});
@@ -41,12 +40,11 @@ public class LoginFrame extends JDialog {
 					} else
 						JOptionPane.showMessageDialog(null, "Login Failed");
 				} catch (Exception e) {
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
 				}
 
 			}
 		});
-		// to do
 		this.getRootPane().setDefaultButton(loginPanel.loginBtn);
 	}
 
@@ -55,7 +53,6 @@ public class LoginFrame extends JDialog {
 		this.setVisible(true);
 		this.setLayout(new BorderLayout());
 		this.setLocation(600, 300);
-
 	}
 
 	private void addComponent() {

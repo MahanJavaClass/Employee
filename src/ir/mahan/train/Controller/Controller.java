@@ -11,6 +11,7 @@ import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.Person;
 import ir.mahan.train.model.Role;
 import ir.mahan.train.view.FormEvent;
+import ir.mahan.train.view.PersonTableModel;
 
 public class Controller {
 	DataBase db;
@@ -31,6 +32,18 @@ public class Controller {
 			db.deletePerson(row);
 		} catch (SQLException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void updatePerson(FormEvent e){
+		try {
+			
+			
+			Person p=ConvertFormEventToPerson(e);
+			db.updatePerson(p);
+		} catch (Exception e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 	/// ---------------------- DataBase -----------------------
@@ -71,7 +84,7 @@ public class Controller {
 
 	/// ---------------------- Convert -----------------------
 	
-	private FormEvent convertPersonToFormEvent(Person p) {
+	  FormEvent convertPersonToFormEvent(Person p) {
 		int ID = p.getID();
 		String name = p.getName();
 		String family = p.getFamily();
@@ -87,7 +100,7 @@ public class Controller {
 		return e;
 	}
 
-	private Person ConvertFormEventToPerson(FormEvent e) {
+	public Person ConvertFormEventToPerson(FormEvent e) {
 
 		int ID = e.getID();
 
