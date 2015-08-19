@@ -7,6 +7,8 @@ import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -54,6 +56,15 @@ public class MainFrame extends JFrame {
 		this.setLayout(new BorderLayout());
 		this.setLocation(400, 200);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.addWindowListener(new WindowAdapter() {
+
+			@Override
+			public void windowClosing(WindowEvent e) {
+				controller.disconnect();
+			
+			}
+			
+		});
 	}
 
 	private void addComponent() {

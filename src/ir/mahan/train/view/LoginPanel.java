@@ -1,7 +1,9 @@
 package ir.mahan.train.view;
 
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -18,6 +20,7 @@ public class LoginPanel extends JPanel {
 	JPasswordField passPassword;
 	JButton loginBtn;
 	ActionLoginListener actionLoginListener;
+	JLabel connectionMsgLabel;
 
 	public LoginPanel() {
 		setLayout(null);
@@ -63,6 +66,11 @@ public class LoginPanel extends JPanel {
 
 			}
 		});
-
+		connectionMsgLabel = new JLabel("Connected");
+		connectionMsgLabel.setBounds(40, 170, 80, 25);
+		 Font font = new Font("TimesNewRoman", Font.BOLD,10);
+		connectionMsgLabel.setFont(font);
+		add(connectionMsgLabel);
+		connectionMsgLabel.hide();
 	}
 }

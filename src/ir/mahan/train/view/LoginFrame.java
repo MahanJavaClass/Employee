@@ -2,7 +2,9 @@ package ir.mahan.train.view;
 
 import ir.mahan.train.Controller.Controller;
 import ir.mahan.train.model.User;
+
 import javax.swing.*;
+
 import java.awt.*;
 
 public class LoginFrame extends JDialog {
@@ -11,10 +13,24 @@ public class LoginFrame extends JDialog {
 
 	LoginPanel loginPanel;
 	User user;
-
+	 Controller controller;
 	LoginFrame(final Controller controller) {
+		this.controller=controller;
 		setView();
 		addComponent();
+		this.getRootPane().setDefaultButton(loginPanel.loginBtn);
+	}
+
+	private void setView() {
+		this.setSize(370, 240);
+		this.setVisible(true);
+		this.setLayout(new BorderLayout());
+		this.setLocation(600, 300);
+	}
+
+	private void addComponent() {
+		loginPanel = new LoginPanel();
+		this.getContentPane().add(loginPanel);
 		loginPanel.setActionLoginListener(new ActionLoginListener() {
 			@Override
 			public void login() {
@@ -45,19 +61,14 @@ public class LoginFrame extends JDialog {
 
 			}
 		});
-		this.getRootPane().setDefaultButton(loginPanel.loginBtn);
-	}
-
-	private void setView() {
-		this.setSize(370, 240);
-		this.setVisible(true);
-		this.setLayout(new BorderLayout());
-		this.setLocation(600, 300);
-	}
-
-	private void addComponent() {
-		loginPanel = new LoginPanel();
-		this.getContentPane().add(loginPanel);
+		controller.setConnectionListener(new IconnectionListener() {
+			
+			@Override
+			public void showConnectionMsg() {
+				// TODO Auto-generated method stub
+				loginPanel.connectionMsgLabel.show();
+			}
+		});
 	}
 
 }

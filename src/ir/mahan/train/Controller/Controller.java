@@ -11,22 +11,37 @@ import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.Person;
 import ir.mahan.train.model.Role;
 import ir.mahan.train.view.FormEvent;
+import ir.mahan.train.view.IconnectionListener;
 import ir.mahan.train.view.PersonTableModel;
 
 public class Controller {
 	DataBase db;
 	Person person;
 	File selectedFile;
+	private IconnectionListener connectionListener;
+
+	public void setConnectionListener(IconnectionListener connectionListener) {
+		this.connectionListener = connectionListener;
+	}
 
 	public Controller() {
 		db = new DataBase();
+		try {
+			db.connect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		// to do....controller ghabl az inke loginframe ijad shavad, new
+		// mishavad
+		// connectionListener.showConnectionMsg();
 	}
 
 	public void addPerson(FormEvent e) throws IOException {
-		
+
 		person = ConvertFormEventToPerson(e);
 		db.addPerson(person);
 	}
+
 	public void deletePerson(int row) throws Exception {
 		try {
 			db.deletePerson(row);
@@ -34,19 +49,19 @@ public class Controller {
 			e.printStackTrace();
 		}
 	}
-	
-	public void updatePerson(FormEvent e){
+
+	public void updatePerson(FormEvent e) {
 		try {
-			
-			
-			Person p=ConvertFormEventToPerson(e);
+
+			Person p = ConvertFormEventToPerson(e);
 			db.updatePerson(p);
 		} catch (Exception e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 	}
-	/// ---------------------- DataBase -----------------------
+
+	// / ---------------------- DataBase -----------------------
 	public void saveToDB() {
 		try {
 			db.setDB();
@@ -65,10 +80,10 @@ public class Controller {
 		return peopleLoaded;
 	}
 
-	/// ---------------------- File --------------------------
-	
+	// / ---------------------- File --------------------------
+
 	public void SaveToFile(File file) throws IOException {
-		
+
 		db.saveToFile(file);
 	}
 
@@ -82,9 +97,9 @@ public class Controller {
 		return formEvents;
 	}
 
-	/// ---------------------- Convert -----------------------
-	
-	  FormEvent convertPersonToFormEvent(Person p) {
+	// / ---------------------- Convert -----------------------
+
+	FormEvent convertPersonToFormEvent(Person p) {
 		int ID = p.getID();
 		String name = p.getName();
 		String family = p.getFamily();
@@ -118,8 +133,9 @@ public class Controller {
 		return person;
 
 	}
-	/// ---------------------- authenticate -----------------------
-	
+
+	// / ---------------------- authenticate -----------------------
+
 	public Boolean authenticate(String userName, String passString) {
 		Boolean success = false;
 		try {
@@ -133,6 +149,14 @@ public class Controller {
 			return false;
 	}
 
-
+	public void disconnect() {
+		// TODO Auto-generated method stub
+		try {
+			db.disConnect();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 }

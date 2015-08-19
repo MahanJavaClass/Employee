@@ -16,6 +16,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.swing.text.StyledEditorKit.BoldAction;
+
 public class DataBase {
 
 	private List<Person> people;
@@ -32,10 +34,13 @@ public class DataBase {
 
 		} catch (ClassNotFoundException e) {
 			throw new Exception("driver Not Found");
+			
 		}
 
 		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
 		con = DriverManager.getConnection(connectionURL);
+		
+		
 	}
 
 	public void disConnect() throws Exception {
@@ -59,18 +64,17 @@ public class DataBase {
 	}
 
 	// /---------------------- File -----------------------------------
-	public List<Person> loadFromFile(File file){
-		try{
-		FileInputStream fileStream = new FileInputStream(file);
-		ObjectInputStream os = new ObjectInputStream(fileStream);
-		Person[] persons = (Person[]) os.readObject();
-		people.clear();
-		people.addAll(Arrays.asList(persons));
-		people.toArray(new Person[people.size()]);
-		os.close();
-		
-		}
-		catch(IOException e){
+	public List<Person> loadFromFile(File file) {
+		try {
+			FileInputStream fileStream = new FileInputStream(file);
+			ObjectInputStream os = new ObjectInputStream(fileStream);
+			Person[] persons = (Person[]) os.readObject();
+			people.clear();
+			people.addAll(Arrays.asList(persons));
+			people.toArray(new Person[people.size()]);
+			os.close();
+
+		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -95,7 +99,6 @@ public class DataBase {
 	// /---------------------- DataBase -------------------------------
 	// /Right Click
 	public void deletePerson(int index) throws Exception {
-		connect();
 		int id;
 		id = people.get(index).getID();
 		people.remove(index);
@@ -103,18 +106,15 @@ public class DataBase {
 		PreparedStatement preparedStatement = con.prepareStatement(removeQuery);
 		preparedStatement.setInt(1, id);
 		preparedStatement.executeUpdate();
-		disConnect();
+		;
 	}
 
 	// /Right Click
 	public void updatePerson(Person newPerson) throws Exception {
-		connect();
 		updateDB(newPerson);
-		disConnect();
 	}
 
 	public void setDB() throws Exception {
-		connect();
 		for (Person p : people) {
 			Boolean isExist = isPersonExist(p.getID());
 			if (isExist) {
@@ -124,7 +124,6 @@ public class DataBase {
 				saveDB(p);
 			}
 		}
-		disConnect();
 	}
 
 	public void saveDB(Person p) {
@@ -177,7 +176,6 @@ public class DataBase {
 	}
 
 	public List<Person> loadFromDB() throws Exception {
-		connect();
 		ArrayList<Person> persons = new ArrayList<Person>();
 		String query = "SELECT * FROM G1.Person ORDER BY ID ";
 		Statement stmt = con.createStatement();
@@ -215,7 +213,6 @@ public class DataBase {
 					favSport, isEmp, salary);
 			persons.add(p);
 		}
-		disConnect();
 		people = persons;
 		return people;
 
@@ -223,7 +220,6 @@ public class DataBase {
 
 	public boolean authenticate(String userName, String password)
 			throws Exception {
-		connect();
 		try {
 			String query = "select username from [User] where username=? and password=?";
 			PreparedStatement checkstm = con.prepareStatement(query);
@@ -231,14 +227,11 @@ public class DataBase {
 			checkstm.setString(2, password);
 			ResultSet rs = checkstm.executeQuery();
 			if (rs.next()) {
-				disConnect();
 				return true;
 			} else {
-				disConnect();
 				return false;
 			}
 		} catch (Exception e) {
-			disConnect();
 			throw e;
 		}
 	}
