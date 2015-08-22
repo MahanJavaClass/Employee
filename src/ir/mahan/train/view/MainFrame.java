@@ -61,9 +61,9 @@ public class MainFrame extends JFrame {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				controller.disconnect();
-			
+
 			}
-			
+
 		});
 	}
 
@@ -74,7 +74,7 @@ public class MainFrame extends JFrame {
 		toolbar = new ToolBar(username);
 		this.getContentPane().add(toolbar, BorderLayout.NORTH);
 		tabbedPane = new JTabbedPane();
-		tabbedPane.add("Text Area", textPanel);
+		//tabbedPane.add("Text Area", textPanel);
 		tabbedPane.add("Person DB", tablePanel);
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel,
 				tabbedPane);
@@ -98,9 +98,11 @@ public class MainFrame extends JFrame {
 
 		tablePanel.setPersonTableListener(new PersonTableListener() {
 			@Override
-			public void saveRow(int row) {
-				FormEvent e = dbForm.get(row);
-				controller.updatePerson(e);
+			public void saveRow(int[] rows) {
+				for (int i = 0; i < rows.length; i++) {
+					FormEvent e = dbForm.get(rows[i]);
+					controller.updatePerson(e);
+				}
 			}
 
 			@Override
@@ -131,6 +133,7 @@ public class MainFrame extends JFrame {
 		toolbar.setToolbarListener(new ToolbarListener() {
 			@Override
 			public void saveEventOccured() {
+				controller.checkEditedCells(dbForm);
 				controller.saveToDB();
 			}
 
@@ -247,7 +250,6 @@ public class MainFrame extends JFrame {
 				}
 			}
 		});
-
 
 		exitMenuItem.addActionListener(new ActionListener() {
 			@Override

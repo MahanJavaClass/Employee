@@ -13,12 +13,12 @@ public class LoginFrame extends JDialog {
 
 	LoginPanel loginPanel;
 	User user;
-	 Controller controller;
+	Controller controller;
+
 	LoginFrame(final Controller controller) {
-		this.controller=controller;
+		this.controller = controller;
 		setView();
 		addComponent();
-		this.getRootPane().setDefaultButton(loginPanel.loginBtn);
 	}
 
 	private void setView() {
@@ -28,9 +28,11 @@ public class LoginFrame extends JDialog {
 		this.setLocation(600, 300);
 	}
 
-	private void addComponent() {
+	private void addComponent()  {
 		loginPanel = new LoginPanel();
 		this.getContentPane().add(loginPanel);
+		if (controller.getConnectionStatus() == true)
+			loginPanel.connectionMsgLabel.setText("Connected");
 		loginPanel.setActionLoginListener(new ActionLoginListener() {
 			@Override
 			public void login() {
@@ -61,14 +63,11 @@ public class LoginFrame extends JDialog {
 
 			}
 		});
-		controller.setConnectionListener(new IconnectionListener() {
-			
-			@Override
-			public void showConnectionMsg() {
-				// TODO Auto-generated method stub
-				loginPanel.connectionMsgLabel.show();
-			}
-		});
 	}
 
+	public void refresh() {
+		if (controller.getConnectionStatus() == true)
+			loginPanel.connectionMsgLabel.setText("Connected");;
+		
+	}
 }

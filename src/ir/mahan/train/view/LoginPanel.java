@@ -1,8 +1,13 @@
 package ir.mahan.train.view;
 
 import java.awt.Font;
+import java.awt.KeyboardFocusManager;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
@@ -26,6 +31,7 @@ public class LoginPanel extends JPanel {
 		setLayout(null);
 		setFormBorder();
 		layoutComponent();
+
 	}
 
 	public void setActionLoginListener(ActionLoginListener loginListener) {
@@ -47,6 +53,17 @@ public class LoginPanel extends JPanel {
 		userNameTxt = new JTextField(20);
 		userNameTxt.setBounds(130, 40, 160, 25);
 		add(userNameTxt);
+		userNameTxt.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					KeyboardFocusManager.getCurrentKeyboardFocusManager()
+							.focusNextComponent();
+
+				}
+			}
+
+		});
 
 		passLbl = new JLabel("Password :");
 		passLbl.setBounds(40, 70, 80, 25);
@@ -63,14 +80,23 @@ public class LoginPanel extends JPanel {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				actionLoginListener.login();
-
 			}
+
 		});
-		connectionMsgLabel = new JLabel("Connected");
+		passPassword.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					actionLoginListener.login();
+				}
+			}
+
+		});
+		connectionMsgLabel = new JLabel("disConnected");
 		connectionMsgLabel.setBounds(40, 170, 80, 25);
-		 Font font = new Font("TimesNewRoman", Font.BOLD,10);
+		Font font = new Font("TimesNewRoman", Font.BOLD, 10);
 		connectionMsgLabel.setFont(font);
 		add(connectionMsgLabel);
-		connectionMsgLabel.hide();
+		
 	}
 }

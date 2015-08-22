@@ -10,8 +10,11 @@ public class Main {
 		SwingUtilities.invokeLater(new Runnable() {
 			@Override
 			public void run() {
-				Controller controller = new Controller();
-				new LoginFrame(controller);
+				try {
+					LoginFrame loginFrame = new LoginFrame(new Controller());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		});
 	}

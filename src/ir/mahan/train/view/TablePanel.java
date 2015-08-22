@@ -55,9 +55,9 @@ public class TablePanel extends JPanel {
 		saveItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				int row = table.getSelectedRow();
+				int[] rows = table.getSelectedRows();
 				if (personTableListener != null) {
-					personTableListener.saveRow(row);
+					personTableListener.saveRow(rows);
 				}
 			}
 		});
@@ -89,8 +89,8 @@ public class TablePanel extends JPanel {
 		table.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mousePressed(MouseEvent e) {
-				int row = table.rowAtPoint(e.getPoint());
-				table.getSelectionModel().setSelectionInterval(row, row);
+				int[] rows = table.getSelectedRows();
+				table.getSelectionModel().setSelectionInterval(rows[0],rows[rows.length-1]);
 				if (e.getButton() == MouseEvent.BUTTON3) {
 					popupMenu.show(table, e.getX(), e.getY());
 				}

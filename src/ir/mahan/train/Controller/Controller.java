@@ -5,35 +5,34 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import ir.mahan.train.model.DataBase;
 import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.Person;
 import ir.mahan.train.model.Role;
 import ir.mahan.train.view.FormEvent;
-import ir.mahan.train.view.IconnectionListener;
-import ir.mahan.train.view.PersonTableModel;
 
 public class Controller {
 	DataBase db;
 	Person person;
 	File selectedFile;
-	private IconnectionListener connectionListener;
+	private boolean connectionStatus = false;
 
-	public void setConnectionListener(IconnectionListener connectionListener) {
-		this.connectionListener = connectionListener;
+	public boolean getConnectionStatus() {
+		return connectionStatus;
 	}
 
-	public Controller() {
+	public void setConnectionStatus(boolean connectionStatus) {
+		this.connectionStatus = connectionStatus;
+	}
+
+	public Controller() throws Exception {
 		db = new DataBase();
 		try {
 			db.connect();
+			connectionStatus = true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("can not connect to database");
 		}
-		// to do....controller ghabl az inke loginframe ijad shavad, new
-		// mishavad
-		// connectionListener.showConnectionMsg();
 	}
 
 	public void addPerson(FormEvent e) throws IOException {
@@ -156,6 +155,13 @@ public class Controller {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+
+	public void checkEditedCells(List<FormEvent> formEvents) {
+		for (int i = 0; i < formEvents.size(); i++) {
+			Person p = ConvertFormEventToPerson(formEvents.get(i));
+			db.getPeopleList().set(i, p);
 		}
 	}
 
