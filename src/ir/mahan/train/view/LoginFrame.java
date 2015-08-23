@@ -30,9 +30,10 @@ public class LoginFrame extends JDialog {
 
 	private void addComponent()  {
 		loginPanel = new LoginPanel();
-		this.getContentPane().add(loginPanel);
+		
 		if (controller.getConnectionStatus() == true)
 			loginPanel.connectionMsgLabel.setText("Connected");
+		this.getContentPane().add(loginPanel);
 		loginPanel.setActionLoginListener(new ActionLoginListener() {
 			@Override
 			public void login() {
@@ -51,7 +52,6 @@ public class LoginFrame extends JDialog {
 							public void run() {
 								new MainFrame("User Form", user.getUserName(),
 										controller);
-
 							}
 						});
 
