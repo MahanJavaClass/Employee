@@ -7,7 +7,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.List;
-
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
@@ -17,14 +16,9 @@ import javax.swing.JTable;
 public class TablePanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	JTable table;
-	JPopupMenu popupMenu;
+	private JTable table;
+	private JPopupMenu popupMenu;
 	private PersonTableModel personTableModel;
-
-	public PersonTableModel getPersonTableModel() {
-		return personTableModel;
-	}
-
 	private PersonTableListener personTableListener;
 
 	public void setPersonTableListener(PersonTableListener personTableListener) {
@@ -90,7 +84,8 @@ public class TablePanel extends JPanel {
 			@Override
 			public void mousePressed(MouseEvent e) {
 				int[] rows = table.getSelectedRows();
-				table.getSelectionModel().setSelectionInterval(rows[0],rows[rows.length-1]);
+				table.getSelectionModel().setSelectionInterval(rows[0],
+						rows[rows.length - 1]);
 				if (e.getButton() == MouseEvent.BUTTON3) {
 					popupMenu.show(table, e.getX(), e.getY());
 				}

@@ -3,7 +3,6 @@ package ir.mahan.train.view;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -14,8 +13,8 @@ public class ToolBar extends JToolBar implements ActionListener {
 	private static final long serialVersionUID = 1L;
 	private JButton saveBtn;
 	private JButton refBtn;
-	JLabel welcomeLbl;
-	String username;
+	private JLabel welcomeLbl;
+	private String username;
 	private ToolbarListener toolbarListener;
 
 	public void setToolbarListener(ToolbarListener toolbarListener) {
@@ -23,11 +22,11 @@ public class ToolBar extends JToolBar implements ActionListener {
 	}
 
 	public ToolBar(String username) {
-
+		this.username = username;
+		
 		Dimension dim = new Dimension();
 		dim.setSize(650, this.HEIGHT);
 
-		this.username = username;
 		setBorder(BorderFactory.createEtchedBorder());
 		setFloatable(false);
 

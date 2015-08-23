@@ -12,64 +12,43 @@ import ir.mahan.train.model.Role;
 import ir.mahan.train.view.FormEvent;
 
 public class Controller {
-	DataBase db;
-	Person person;
-	File selectedFile;
-	private boolean connectionStatus = false;
+	private DataBase db;
+	private Person person;
 
-	public boolean getConnectionStatus() {
-		return connectionStatus;
-	}
-
-	public void setConnectionStatus(boolean connectionStatus) {
-		this.connectionStatus = connectionStatus;
-	}
-
-	public Controller() throws Exception {
+	public Controller() {
 		db = new DataBase();
-		try {
-			db.connect();
-			connectionStatus = true;
-		} catch (Exception e) {
-			System.out.println("can not connect to database");
-		}
 	}
 
-	public void addPerson(FormEvent e) throws IOException {
+	public void addPerson(FormEvent e) {
 
 		person = ConvertFormEventToPerson(e);
 		db.addPerson(person);
 	}
 
-	public void deletePerson(int row) throws Exception {
-		try {
-			db.deletePerson(row);
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public void deletePerson(int row) throws SQLException {
+		db.deletePerson(row);
 	}
 
-	public void updatePerson(FormEvent e) {
-		try {
-
-			Person p = ConvertFormEventToPerson(e);
-			db.updatePerson(p);
-		} catch (Exception e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+	public void updatePerson(FormEvent e) throws SQLException {
+		Person p = ConvertFormEventToPerson(e);
+		db.updatePerson(p);
 	}
 
 	// / ---------------------- DataBase -----------------------
-	public void saveToDB() {
-		try {
-			db.setDB();
-		} catch (Exception e) {
-			System.out.println("No connection found");
-		}
+
+	public void connect() throws ClassNotFoundException, SQLException {
+		db.connect();
 	}
 
-	public List<FormEvent> loadFromDB() throws Exception {
+	public void disconnect() throws SQLException {
+		db.disConnect();
+	}
+
+	public void saveToDB() throws SQLException {
+		db.setDB();
+	}
+
+	public List<FormEvent> loadFromDB() throws SQLException {
 		List<Person> people = db.loadFromDB();
 		List<FormEvent> peopleLoaded = new ArrayList<FormEvent>();
 		for (Person p : people) {
@@ -86,7 +65,8 @@ public class Controller {
 		db.saveToFile(file);
 	}
 
-	public List<FormEvent> loadFromFile(File file) throws IOException {
+	public List<FormEvent> loadFromFile(File file)
+			throws ClassNotFoundException, IOException {
 
 		List<Person> people = db.loadFromFile(file);
 		List<FormEvent> formEvents = new ArrayList<>();
@@ -135,27 +115,14 @@ public class Controller {
 
 	// / ---------------------- authenticate -----------------------
 
-	public Boolean authenticate(String userName, String passString) {
+	public Boolean authenticate(String userName, String passString)
+			throws SQLException {
 		Boolean success = false;
-		try {
-			success = db.authenticate(userName, passString);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		success = db.authenticate(userName, passString);
 		if (success)
 			return true;
 		else
 			return false;
-	}
-
-	public void disconnect() {
-		// TODO Auto-generated method stub
-		try {
-			db.disConnect();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	public void checkEditedCells(List<FormEvent> formEvents) {

@@ -27,33 +27,33 @@ import javax.swing.border.Border;
 public class FormPanel extends JPanel {
 
 	private static final long serialVersionUID = 1L;
-	JLabel nameLbl;
-	JLabel familyLbl;
-	JLabel roleLbl;
-	JLabel ageLbl;
-	JLabel cityLbl;
-	JLabel genderLbl;
-	JLabel sportLbl;
-	JLabel salaryLbl;
+	private JLabel nameLbl;
+	private JLabel familyLbl;
+	private JLabel roleLbl;
+	private JLabel ageLbl;
+	private JLabel cityLbl;
+	private JLabel genderLbl;
+	private JLabel sportLbl;
+	private JLabel salaryLbl;
 
-	JTextField nameTxt;
-	JTextField familyTxt;
-	JTextField salaryTxt;
+	private JTextField nameTxt;
+	private JTextField familyTxt;
+	private JTextField salaryTxt;
 
-	JRadioButton ageOption1;
-	JRadioButton ageOption2;
-	JRadioButton ageOption3;
+	private JRadioButton ageOption1;
+	private JRadioButton ageOption2;
+	private JRadioButton ageOption3;
 
-	JComboBox<Role> roleCB;
-	JComboBox<Gender> genderCB;
+	private JComboBox<Role> roleCB;
+	private JComboBox<Gender> genderCB;
 
-	JList<Sport> favoriteSportList;
+	private JList<Sport> favoriteSportList;
 
-	JCheckBox city01;
-	JCheckBox city02;
-	JCheckBox isEmp;
+	private JCheckBox city01;
+	private JCheckBox city02;
+	private JCheckBox isEmp;
 
-	JButton submitBtn;
+	private JButton submitBtn;
 
 	private FormListener formListener;
 

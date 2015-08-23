@@ -2,22 +2,21 @@ package ir.mahan.train.view;
 
 import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.Role;
-
 import java.io.Serializable;
 
 public class FormEvent implements Serializable {
 	private static final long serialVersionUID = 1L;
 	public static int count = 0;
 	int ID;
-	String name;
-	String family;
-	Gender gender;
-	String city;
-	Role role;
-	String age;
-	String favoriteSport;
-	String salary;
-	Boolean isEmp;
+	private String name;
+	private String family;
+	private Gender gender;
+	private String city;
+	private Role role;
+	private String age;
+	private String favoriteSport;
+	private String salary;
+	private Boolean isEmp;
 
 	public FormEvent(int ID, String name, String family, Gender gender,
 			String age, Role role, String city, String favSport, Boolean isEmp,

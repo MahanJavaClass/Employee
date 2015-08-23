@@ -3,6 +3,10 @@ package ir.mahan.train.model;
 public class User {
 	private String userName;
 	private char[] password;
+	
+	public User(String usr, String pss){		
+	}
+	
 	public String getUserName() {
 		return userName;
 	}

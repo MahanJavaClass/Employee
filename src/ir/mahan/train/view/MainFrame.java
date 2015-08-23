@@ -1,8 +1,6 @@
 package ir.mahan.train.view;
 
 import ir.mahan.train.Controller.Controller;
-import ir.mahan.train.model.Person;
-
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,9 +9,9 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -28,16 +26,16 @@ import javax.swing.KeyStroke;
 public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	TextPanel textPanel;
-	TablePanel tablePanel;
-	FormPanel formPanel;
-	ToolBar toolbar;
-	JSplitPane splitPane;
-	JTabbedPane tabbedPane;
-	JFileChooser fileChooser;
+	private TextPanel textPanel;
+	private TablePanel tablePanel;
+	private FormPanel formPanel;
+	private ToolBar toolbar;
+	private JSplitPane splitPane;
+	private JTabbedPane tabbedPane;
+	private JFileChooser fileChooser;
 	private List<FormEvent> dbForm;
-	String username;
-	Controller controller;
+	private String username;
+	private Controller controller;
 
 	public MainFrame(String title, String username, Controller controller) {
 		this.controller = controller;
@@ -60,10 +58,12 @@ public class MainFrame extends JFrame {
 
 			@Override
 			public void windowClosing(WindowEvent e) {
-				controller.disconnect();
-
+				try {
+					controller.disconnect();
+				} catch (SQLException e1) {
+					showStackTraceMessage(e1);
+				}
 			}
-
 		});
 	}
 
@@ -74,7 +74,7 @@ public class MainFrame extends JFrame {
 		toolbar = new ToolBar(username);
 		this.getContentPane().add(toolbar, BorderLayout.NORTH);
 		tabbedPane = new JTabbedPane();
-		//tabbedPane.add("Text Area", textPanel);
+		// tabbedPane.add("Text Area", textPanel);
 		tabbedPane.add("Person DB", tablePanel);
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel,
 				tabbedPane);
@@ -84,15 +84,10 @@ public class MainFrame extends JFrame {
 		formPanel.setformListener(new FormListener() {
 			@Override
 			public void formEventOccured(FormEvent e) {
-
-				try {
-					dbForm.add(e);
-					textPanel.setTextArea(e);
-					tablePanel.refresh();
-					controller.addPerson(e);
-				} catch (IOException e1) {
-					e1.printStackTrace();
-				}
+				dbForm.add(e);
+				textPanel.setTextArea(e);
+				tablePanel.refresh();
+				controller.addPerson(e);
 			}
 		});
 
@@ -101,7 +96,11 @@ public class MainFrame extends JFrame {
 			public void saveRow(int[] rows) {
 				for (int i = 0; i < rows.length; i++) {
 					FormEvent e = dbForm.get(rows[i]);
-					controller.updatePerson(e);
+					try {
+						controller.updatePerson(e);
+					} catch (SQLException e1) {
+						showStackTraceMessage(e1);
+					}
 				}
 			}
 
@@ -109,14 +108,14 @@ public class MainFrame extends JFrame {
 			public void refreshRow() {
 				try {
 					dbForm = controller.loadFromDB();
-					tablePanel.setData(dbForm);
-					tablePanel.refresh();
-					if (dbForm.size() > 0) {
-						int dbformSize = dbForm.size() - 1;
-						FormEvent.count = dbForm.get(dbformSize).getID() + 1;
-					}
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (SQLException e) {
+					showStackTraceMessage(e);
+				}
+				tablePanel.setData(dbForm);
+				tablePanel.refresh();
+				if (dbForm.size() > 0) {
+					int dbformSize = dbForm.size() - 1;
+					FormEvent.count = dbForm.get(dbformSize).getID() + 1;
 				}
 			}
 
@@ -124,8 +123,8 @@ public class MainFrame extends JFrame {
 			public void deleteRow(int row) {
 				try {
 					controller.deletePerson(row);
-				} catch (Exception e) {
-					e.printStackTrace();
+				} catch (SQLException e) {
+					showStackTraceMessage(e);
 				}
 				dbForm.remove(row);
 			}
@@ -134,13 +133,21 @@ public class MainFrame extends JFrame {
 			@Override
 			public void saveEventOccured() {
 				controller.checkEditedCells(dbForm);
-				controller.saveToDB();
+				try {
+					controller.saveToDB();
+				} catch (SQLException e) {
+					showStackTraceMessage(e);
+				}
 			}
 
 			@Override
-			public void refreshEventOccured() throws Exception {
+			public void refreshEventOccured() {
 
-				dbForm = controller.loadFromDB();
+				try {
+					dbForm = controller.loadFromDB();
+				} catch (SQLException e) {
+					showStackTraceMessage(e);
+				}
 				for (FormEvent e : dbForm) {
 					textPanel.setTextArea(e);
 				}
@@ -219,18 +226,21 @@ public class MainFrame extends JFrame {
 					FormEvent.count = 0;
 					textPanel.textArea.setText("");
 					File selectedFile = fileChooser.getSelectedFile();
+
+					List<FormEvent> formEvents;
 					try {
-						List<FormEvent> formEvents = controller
-								.loadFromFile(selectedFile);
+						formEvents = controller.loadFromFile(selectedFile);
 
 						for (FormEvent e : formEvents) {
 							textPanel.setTextArea(e);
 							dbForm.add(e);
+
+							tablePanel.refresh();
 						}
-						tablePanel.refresh();
-					} catch (IOException e) {
-						e.printStackTrace();
+					} catch (ClassNotFoundException | IOException e1) {
+						showStackTraceMessage(e1);
 					}
+
 				}
 			}
 		});
@@ -244,8 +254,7 @@ public class MainFrame extends JFrame {
 					try {
 						controller.SaveToFile(selectedFile);
 					} catch (IOException e) {
-						JOptionPane.showMessageDialog(MainFrame.this,
-								"file does not exist.");
+						showStackTraceMessage(e);
 					}
 				}
 			}
@@ -256,7 +265,7 @@ public class MainFrame extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 
 				int action = JOptionPane.showConfirmDialog(MainFrame.this,
-						"Do You Really", "Confirm Text",
+						"Do You want to exit?", "Confirm Text",
 						JOptionPane.OK_CANCEL_OPTION);
 				if (action == JOptionPane.OK_OPTION)
 					System.exit(0);
@@ -264,5 +273,10 @@ public class MainFrame extends JFrame {
 		});
 
 		return menuBar;
+	}
+
+	private void showStackTraceMessage(Exception e) {
+		JOptionPane.showMessageDialog(null, e.getMessage(), "خطا",
+				JOptionPane.ERROR_MESSAGE);
 	}
 }

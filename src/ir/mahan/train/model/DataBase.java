@@ -16,43 +16,25 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import javax.swing.text.StyledEditorKit.BoldAction;
-
 public class DataBase {
 
 	private List<Person> people;
-	Connection con;
-	Statement statement = null;
+	private Connection con;
+	private Statement statement = null;
 
 	public DataBase() {
 		people = new ArrayList<>();
 	}
 
-	public void connect() throws Exception {
-		try {
-			Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-
-		} catch (ClassNotFoundException e) {
-			throw new Exception("driver Not Found");
-			
-		}
-
+	public void connect() throws ClassNotFoundException, SQLException {
+		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
 		con = DriverManager.getConnection(connectionURL);
-		
-		
 	}
 
-	public void disConnect() throws Exception {
-		if (con != null) {
-
-			try {
-				con.close();
-
-			} catch (SQLException e) {
-				throw new Exception("Could Not Disconnect...");
-			}
-		}
+	public void disConnect() throws SQLException {
+		if (con != null)
+			con.close();
 	}
 
 	public List<Person> getPeopleList() {
@@ -64,41 +46,31 @@ public class DataBase {
 	}
 
 	// /---------------------- File -----------------------------------
-	public List<Person> loadFromFile(File file) {
-		try {
-			FileInputStream fileStream = new FileInputStream(file);
-			ObjectInputStream os = new ObjectInputStream(fileStream);
-			Person[] persons = (Person[]) os.readObject();
-			people.clear();
-			people.addAll(Arrays.asList(persons));
-			people.toArray(new Person[people.size()]);
-			os.close();
+	public List<Person> loadFromFile(File file) throws IOException,
+			ClassNotFoundException {
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		FileInputStream fileStream = new FileInputStream(file);
+		ObjectInputStream os = new ObjectInputStream(fileStream);
+		Person[] persons = (Person[]) os.readObject();
+		people.clear();
+		people.addAll(Arrays.asList(persons));
+		people.toArray(new Person[people.size()]);
+		os.close();
 		return people;
 	}
 
 	public void saveToFile(File file) throws IOException {
-
 		FileOutputStream fileStream = new FileOutputStream(file);
 		ObjectOutputStream os = new ObjectOutputStream(fileStream);
-
 		Person[] persons = people.toArray(new Person[people.size()]);
-
 		os.writeObject(persons);
-
 		os.close();
 
 	}
 
 	// /---------------------- DataBase -------------------------------
 	// /Right Click
-	public void deletePerson(int index) throws Exception {
+	public void deletePerson(int index) throws SQLException {
 		int id;
 		id = people.get(index).getID();
 		people.remove(index);
@@ -110,11 +82,11 @@ public class DataBase {
 	}
 
 	// /Right Click
-	public void updatePerson(Person newPerson) throws Exception {
+	public void updatePerson(Person newPerson) throws SQLException {
 		updateDB(newPerson);
 	}
 
-	public void setDB() throws Exception {
+	public void setDB() throws SQLException {
 		for (Person p : people) {
 			Boolean isExist = isPersonExist(p.getID());
 			if (isExist) {
@@ -126,7 +98,7 @@ public class DataBase {
 		}
 	}
 
-	public void saveDB(Person p) {
+	public void saveDB(Person p) throws SQLException {
 		String query;
 		query = "INSERT INTO G1.Person Values (" + p.getID() + ",'"
 				+ p.getName() + "','" + p.getFamily() + "','" + p.getGender()
@@ -134,17 +106,12 @@ public class DataBase {
 				+ p.getCity() + "','" + p.getFavoriteSport() + "',"
 				+ isEmployee(p) + ",'" + p.getSalary() + "')";
 
-		try {
-			statement = con.createStatement();
-			statement.executeUpdate(query);
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		statement = con.createStatement();
+		statement.executeUpdate(query);
 
 	}
 
-	public void updateDB(Person p) throws Exception {
+	public void updateDB(Person p) throws SQLException {
 
 		String query;
 		query = "UPDATE G1.Person set FirstName='" + p.getName()
@@ -157,7 +124,7 @@ public class DataBase {
 		statement.executeUpdate(query);
 	}
 
-	private Boolean isPersonExist(int id) throws Exception {
+	private Boolean isPersonExist(int id) throws SQLException {
 		String query = "select * from G1.person where ID=" + id;
 		Statement stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery(query);
@@ -175,7 +142,7 @@ public class DataBase {
 		}
 	}
 
-	public List<Person> loadFromDB() throws Exception {
+	public List<Person> loadFromDB() throws SQLException {
 		ArrayList<Person> persons = new ArrayList<Person>();
 		String query = "SELECT * FROM G1.Person ORDER BY ID ";
 		Statement stmt = con.createStatement();
@@ -219,20 +186,17 @@ public class DataBase {
 	}
 
 	public boolean authenticate(String userName, String password)
-			throws Exception {
-		try {
-			String query = "select username from [User] where username=? and password=?";
-			PreparedStatement checkstm = con.prepareStatement(query);
-			checkstm.setString(1, userName);
-			checkstm.setString(2, password);
-			ResultSet rs = checkstm.executeQuery();
-			if (rs.next()) {
-				return true;
-			} else {
-				return false;
-			}
-		} catch (Exception e) {
-			throw e;
+			throws SQLException {
+
+		String query = "select username from [User] where username=? and password=?";
+		PreparedStatement checkstm = con.prepareStatement(query);
+		checkstm.setString(1, userName);
+		checkstm.setString(2, password);
+		ResultSet rs = checkstm.executeQuery();
+		if (rs.next()) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 

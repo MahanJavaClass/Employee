@@ -2,15 +2,12 @@ package ir.mahan.train.view;
 
 import ir.mahan.train.Controller.Controller;
 import ir.mahan.train.model.User;
-
 import javax.swing.*;
-
 import java.awt.*;
+import java.sql.SQLException;
 
 public class LoginFrame extends JDialog {
-
 	private static final long serialVersionUID = 1L;
-
 	LoginPanel loginPanel;
 	User user;
 	Controller controller;
@@ -19,6 +16,7 @@ public class LoginFrame extends JDialog {
 		this.controller = controller;
 		setView();
 		addComponent();
+		connect();
 	}
 
 	private void setView() {
@@ -28,46 +26,76 @@ public class LoginFrame extends JDialog {
 		this.setLocation(600, 300);
 	}
 
-	private void addComponent()  {
+	private void addComponent() {
+
 		loginPanel = new LoginPanel();
-		
-		if (controller.getConnectionStatus() == true)
-			loginPanel.connectionMsgLabel.setText("Connected");
-		this.getContentPane().add(loginPanel);
-		loginPanel.setActionLoginListener(new ActionLoginListener() {
+		this.add(loginPanel);
+		loginPanel.setLoginListener(new LoginListener() {
 			@Override
 			public void login() {
-				user = new User();
-				user.setUserName(loginPanel.userNameTxt.getText());
-				user.setPassword(loginPanel.passPassword.getPassword());
-				String passString = new String(user.getPassword());
-				Boolean success;
 				try {
-					success = controller.authenticate(user.getUserName(),
-							passString);
-					if (success) {
-						SwingUtilities.getWindowAncestor(loginPanel).dispose();
-						SwingUtilities.invokeLater(new Runnable() {
-							@Override
-							public void run() {
-								new MainFrame("User Form", user.getUserName(),
-										controller);
-							}
-						});
+					final String username = loginPanel.userNameTxt.getText();
+					String password = new String(loginPanel.passPassword
+							.getPassword());
+					if (!username.isEmpty() && !password.isEmpty()) {
 
-					} else
-						JOptionPane.showMessageDialog(null, "Login Failed");
+						boolean userExist = controller.authenticate(username,
+								password);
+
+						if (userExist) {
+
+							SwingUtilities.getWindowAncestor(loginPanel)
+									.dispose();
+							SwingUtilities.invokeLater(new Runnable() {
+
+								@Override
+								public void run() {
+									new MainFrame("SZ App", username,
+											controller);
+								}
+							});
+
+						} else {
+
+							throw new Exception(
+									"Incorrect username or password!");
+						}
+					} else {
+						loginPanel.checkValidity(username, password);
+						throw new Exception("Username or Password is Empty!");
+
+					}
+
+				} catch (SQLException e) {
+
+					JOptionPane.showMessageDialog(loginPanel, e.getMessage(),
+							"خطا", JOptionPane.ERROR_MESSAGE);
+
 				} catch (Exception e) {
-					JOptionPane.showMessageDialog(null, e.getMessage());
-				}
 
+					JOptionPane.showMessageDialog(loginPanel, e.getMessage(),
+							"خطا", JOptionPane.ERROR_MESSAGE);
+				}
 			}
 		});
+
 	}
 
-	public void refresh() {
-		if (controller.getConnectionStatus() == true)
-			loginPanel.connectionMsgLabel.setText("Connected");;
-		
+	private void connect() {
+		try {
+			controller.connect();
+			loginPanel.connectionMsgLabel.setText("Connected");
+
+		} catch (SQLException e) {
+
+			JOptionPane.showMessageDialog(loginPanel, e.getMessage(), "خطا",
+					JOptionPane.ERROR_MESSAGE);
+
+		} catch (ClassNotFoundException e) {
+
+			JOptionPane.showMessageDialog(loginPanel, e.getMessage(), "خطا",
+					JOptionPane.ERROR_MESSAGE);
+		}
 	}
+
 }
