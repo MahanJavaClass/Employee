@@ -3,7 +3,7 @@ package ir.mahan.train.view;
 import ir.mahan.train.model.Role;
 import ir.mahan.train.model.Gender;
 import ir.mahan.train.model.Sport;
-import ir.mahan.train.model.Validate;
+import ir.mahan.train.model.Validation;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -271,9 +271,9 @@ public class FormPanel extends JPanel {
 	}
 
 	private void submitAction() {
-		Validate validate;
+		Validation validate;
 		String error = "";
-		validate = new Validate();
+		validate = new Validation();
 
 		if (!validate.stringValidate(nameTxt.getText())) {
 			error += "Name invalid!\n";

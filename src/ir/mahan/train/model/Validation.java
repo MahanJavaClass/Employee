@@ -1,6 +1,6 @@
 package ir.mahan.train.model;
 
-public class Validate {
+public class Validation {
 
 	public boolean stringValidate(String str) {
 
