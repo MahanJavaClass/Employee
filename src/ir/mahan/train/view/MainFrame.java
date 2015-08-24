@@ -38,14 +38,21 @@ public class MainFrame extends JFrame {
 	private Controller controller;
 
 	public MainFrame(String title, String username, Controller controller) {
+		initialize(username, controller);
+		setView();
+		instanciateComponent();
+		addComponent();
+		setFormListener();
+		setTableListener();
+		setToolbarListener();
+		setJMenuBar(createMenu());
+		tablePanel.setData(dbForm);
+	}
+
+	public void initialize(String username, Controller controller) {
 		this.controller = controller;
 		this.username = username;
-		setView();
-		addComponent();
-		setJMenuBar(createMenu());
-		dbForm = new ArrayList<FormEvent>();
-		tablePanel.setData(dbForm);
-
+		this.dbForm = new ArrayList<FormEvent>();
 	}
 
 	private void setView() {
@@ -54,8 +61,12 @@ public class MainFrame extends JFrame {
 		this.setLayout(new BorderLayout());
 		this.setLocation(400, 200);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.addWindowListener(new WindowAdapter() {
+		this.addWindowListenerToMainFrame();
 
+	}
+
+	private void addWindowListenerToMainFrame() {
+		this.addWindowListener(new WindowAdapter() {
 			@Override
 			public void windowClosing(WindowEvent e) {
 				try {
@@ -68,29 +79,58 @@ public class MainFrame extends JFrame {
 	}
 
 	private void addComponent() {
+		this.getContentPane().add(toolbar, BorderLayout.NORTH);
+		tabbedPane.add("Person DB", tablePanel);
+		splitPane.setOneTouchExpandable(true);
+		this.getContentPane().add(splitPane, BorderLayout.CENTER);
+
+	}
+
+	private void instanciateComponent() {
 		textPanel = new TextPanel();
 		tablePanel = new TablePanel();
 		formPanel = new FormPanel();
 		toolbar = new ToolBar(username);
-		this.getContentPane().add(toolbar, BorderLayout.NORTH);
 		tabbedPane = new JTabbedPane();
-		// tabbedPane.add("Text Area", textPanel);
-		tabbedPane.add("Person DB", tablePanel);
 		splitPane = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT, formPanel,
 				tabbedPane);
-		splitPane.setOneTouchExpandable(true);
-		this.getContentPane().add(splitPane, BorderLayout.CENTER);
-		createMenu();
-		formPanel.setformListener(new FormListener() {
+	}
+
+	private void setToolbarListener() {
+		toolbar.setToolbarListener(new ToolbarListener() {
 			@Override
-			public void formEventOccured(FormEvent e) {
-				dbForm.add(e);
-				textPanel.setTextArea(e);
+			public void saveEventOccured() {
+				controller.checkEditedCells(dbForm);
+				try {
+					controller.saveToDB();
+				} catch (SQLException e) {
+					showStackTraceMessage(e);
+				}
+			}
+
+			@Override
+			public void refreshEventOccured() {
+
+				try {
+					dbForm = controller.loadFromDB();
+				} catch (SQLException e) {
+					showStackTraceMessage(e);
+				}
+				for (FormEvent e : dbForm) {
+					textPanel.setTextArea(e);
+				}
+				tablePanel.setData(dbForm);
 				tablePanel.refresh();
-				controller.addPerson(e);
+				if (dbForm.size() > 0) {
+					int dbformSize = dbForm.size() - 1;
+					FormEvent.count = dbForm.get(dbformSize).getID() + 1;
+				}
 			}
 		});
 
+	}
+
+	private void setTableListener() {
 		tablePanel.setPersonTableListener(new PersonTableListener() {
 			@Override
 			public void saveRow(int[] rows) {
@@ -129,36 +169,20 @@ public class MainFrame extends JFrame {
 				dbForm.remove(row);
 			}
 		});
-		toolbar.setToolbarListener(new ToolbarListener() {
-			@Override
-			public void saveEventOccured() {
-				controller.checkEditedCells(dbForm);
-				try {
-					controller.saveToDB();
-				} catch (SQLException e) {
-					showStackTraceMessage(e);
-				}
-			}
 
-			@Override
-			public void refreshEventOccured() {
+	}
 
-				try {
-					dbForm = controller.loadFromDB();
-				} catch (SQLException e) {
-					showStackTraceMessage(e);
-				}
-				for (FormEvent e : dbForm) {
-					textPanel.setTextArea(e);
-				}
-				tablePanel.setData(dbForm);
+	private void setFormListener() {
+		formPanel.setformListener(new FormListener() {
+			@Override
+			public void formEventOccured(FormEvent e) {
+				dbForm.add(e);
+				textPanel.setTextArea(e);
 				tablePanel.refresh();
-				if (dbForm.size() > 0) {
-					int dbformSize = dbForm.size() - 1;
-					FormEvent.count = dbForm.get(dbformSize).getID() + 1;
-				}
+				controller.addPerson(e);
 			}
 		});
+
 	}
 
 	public JMenuBar createMenu() {
@@ -218,6 +242,47 @@ public class MainFrame extends JFrame {
 		fileChooser.setAcceptAllFileFilterUsed(false);
 		fileChooser.addChoosableFileFilter(new userFileFilter());
 
+		addActionListenerToLoadFile(loadFileMenuItem);
+		addActionListenerToExportFile(exportToFile);
+		addActionListenerToExit(exitMenuItem);
+
+		return menuBar;
+	}
+
+	private void addActionListenerToExit(JMenuItem exitMenuItem) {
+		exitMenuItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+
+				int action = JOptionPane.showConfirmDialog(MainFrame.this,
+						"Do You want to exit?", "Confirm Text",
+						JOptionPane.OK_CANCEL_OPTION);
+				if (action == JOptionPane.OK_OPTION)
+					System.exit(0);
+			}
+		});
+
+	}
+
+	private void addActionListenerToExportFile(JMenuItem exportToFile) {
+		exportToFile.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+
+				if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
+					File selectedFile = fileChooser.getSelectedFile();
+					try {
+						controller.SaveToFile(selectedFile);
+					} catch (IOException e) {
+						showStackTraceMessage(e);
+					}
+				}
+			}
+		});
+
+	}
+
+	private void addActionListenerToLoadFile(JMenuItem loadFileMenuItem) {
 		loadFileMenuItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
@@ -234,7 +299,6 @@ public class MainFrame extends JFrame {
 						for (FormEvent e : formEvents) {
 							textPanel.setTextArea(e);
 							dbForm.add(e);
-
 							tablePanel.refresh();
 						}
 					} catch (ClassNotFoundException | IOException e1) {
@@ -245,34 +309,6 @@ public class MainFrame extends JFrame {
 			}
 		});
 
-		exportToFile.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-
-				if (fileChooser.showSaveDialog(MainFrame.this) == JFileChooser.APPROVE_OPTION) {
-					File selectedFile = fileChooser.getSelectedFile();
-					try {
-						controller.SaveToFile(selectedFile);
-					} catch (IOException e) {
-						showStackTraceMessage(e);
-					}
-				}
-			}
-		});
-
-		exitMenuItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-
-				int action = JOptionPane.showConfirmDialog(MainFrame.this,
-						"Do You want to exit?", "Confirm Text",
-						JOptionPane.OK_CANCEL_OPTION);
-				if (action == JOptionPane.OK_OPTION)
-					System.exit(0);
-			}
-		});
-
-		return menuBar;
 	}
 
 	private void showStackTraceMessage(Exception e) {

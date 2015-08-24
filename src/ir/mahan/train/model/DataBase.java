@@ -16,7 +16,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Properties;
 
 public class DataBase {
 
@@ -32,9 +31,7 @@ public class DataBase {
 	public void connect() throws ClassNotFoundException, SQLException,
 			IOException {
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		// String connectionURL =
-		// "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
-		String connectionURL= new ConfigGenerator().getPropValues();
+		String connectionURL = new ConfigGenerator().getPropValues();
 		con = DriverManager.getConnection(connectionURL);
 	}
 
@@ -149,40 +146,40 @@ public class DataBase {
 		ResultSet rs = stmt.executeQuery(query);
 
 		while (rs.next()) {
-
-			int ID = rs.getInt("ID");
-			String name = rs.getString("FirstName");
-			String family = rs.getString("LastName");
-			String age = rs.getString("Age");
-			String city = rs.getString("City");
-			String gender = rs.getString("Gender");
-			String role = rs.getString("Category");
-			String favSport = rs.getString("Sport");
-			Boolean isEmp = rs.getBoolean("IsEmployee");
-			String salary = rs.getString("Salary");
-
-			Role roleE;
-			Gender genderE;
-
-			if (gender.equals("Female"))
-				genderE = Gender.Female;
-			else
-				genderE = Gender.Male;
-
-			if (role.equals("staff"))
-				roleE = Role.staff;
-			else if (role.equals("student"))
-				roleE = Role.student;
-			else
-				roleE = Role.teacher;
-
-			Person p = new Person(ID, name, family, genderE, age, roleE, city,
-					favSport, isEmp, salary);
-			persons.add(p);
+			persons.add(readColumnsOfPersonTable(rs));
 		}
 		people = persons;
 		return people;
 
+	}
+
+	public Person readColumnsOfPersonTable(ResultSet rs) throws SQLException {
+		Role roleE;
+		Gender genderE;
+		genderE = recognizePersonGender(rs);
+		roleE = recognizePersonRole(rs);
+		Person p = new Person(rs.getInt("ID"), rs.getString("FirstName"),
+				rs.getString("LastName"), genderE, rs.getString("Age"), roleE,
+				rs.getString("City"), rs.getString("Sport"),
+				rs.getBoolean("IsEmployee"), rs.getString("Salary"));
+		return p;
+	}
+
+	public Role recognizePersonRole(ResultSet rs) throws SQLException {
+
+		if (rs.getString("Category").equals("staff"))
+			return Role.staff;
+		else if (rs.getString("Category").equals("student"))
+			return Role.student;
+		else
+			return Role.teacher;
+	}
+
+	public Gender recognizePersonGender(ResultSet rs) throws SQLException {
+		if (rs.getString("Gender").equals("Female"))
+			return Gender.Female;
+		else
+			return Gender.Male;
 	}
 
 	public boolean authenticate(String userName, String password)

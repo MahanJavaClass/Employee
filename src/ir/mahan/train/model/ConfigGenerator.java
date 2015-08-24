@@ -23,8 +23,6 @@ public class ConfigGenerator {
 				} else {
 					throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
 				}
-	 
-				// get the property value and print it out
 				String dbuser = prop.getProperty("dbuser");
 				String dbpassword = prop.getProperty("dbpassword");
 				String database = prop.getProperty("database");
