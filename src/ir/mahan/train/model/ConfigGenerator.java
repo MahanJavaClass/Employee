@@ -1,48 +1,42 @@
 package ir.mahan.train.model;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Properties;
 
 public class ConfigGenerator {
-//	public void generateCongigFile() {
-//		Properties prop = new Properties();
-//		FileOutputStream output = null;
-//
-//		try {
-//			//"jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
-//			output = new FileOutputStream("config.properties");
-//			prop.setProperty("ServerAddress", "swsql.mahanair.aero");
-//			prop.setProperty("database", "javaTraining");
-//			prop.setProperty("dbuser", "sa");
-//			prop.setProperty("dbpassword", "123");
-//
-//			// save properties to project root folder
-//			prop.store(output, null);
-//
-//		} catch (IOException io) {
-//			io.printStackTrace();
-//		} finally {
-//			if (output != null) {
-//				try {
-//					output.close();
-//				} catch (IOException e) {
-//					e.printStackTrace();
-//				}
-//			}
-//			
-//		}
-//
-//	}
 
-	public String ReadPropertiesFile() throws IOException {
-		File file = new File("test.properties");
-		FileInputStream fileInput = new FileInputStream(file);
-		Properties properties = new Properties();
-		properties.load(fileInput);
-		fileInput.close();
-		return null;
-	}
+		String result = "";
+		InputStream inputStream;
+	 
+		public String getPropValues() throws IOException {
+	 
+			try {
+				Properties prop = new Properties();
+				String propFileName = "config.properties";
+	 
+				inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+	 
+				if (inputStream != null) {
+					prop.load(inputStream);
+				} else {
+					throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
+				}
+	 
+				// get the property value and print it out
+				String dbuser = prop.getProperty("dbuser");
+				String dbpassword = prop.getProperty("dbpassword");
+				String database = prop.getProperty("database");
+				String ServerAddress = prop.getProperty("ServerAddress");
+	 
+				result = "jdbc:sqlserver://" + ServerAddress + ";user=" + dbuser + ";password=" +dbpassword+";database="+database ;
+			} catch (Exception e) {
+				System.out.println("Exception: " + e);
+			} finally {
+				inputStream.close();
+			}
+			return result;
+		}
+	
 }

@@ -34,9 +34,7 @@ public class DataBase {
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
 		// String connectionURL =
 		// "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
-		new ConfigGenerator().generateCongigFile();
-		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero"
-				+ configGenerator.ReadPropertiesFile();
+		String connectionURL= new ConfigGenerator().getPropValues();
 		con = DriverManager.getConnection(connectionURL);
 	}
 
