@@ -26,8 +26,7 @@ public class LoginPanel extends JPanel {
 	JLabel connectionMsgLabel;
 
 	public LoginPanel() {
-		setLayout(null);
-		this.setName("tablooo");
+		setLayout(null);		
 		setFormBorder();
 		layoutComponent();
 	}

@@ -36,7 +36,8 @@ public class Controller {
 
 	// / ---------------------- DataBase -----------------------
 
-	public void connect() throws ClassNotFoundException, SQLException {
+	public void connect() throws ClassNotFoundException, SQLException,
+			IOException {
 		db.connect();
 	}
 
@@ -79,36 +80,16 @@ public class Controller {
 	// / ---------------------- Convert -----------------------
 
 	FormEvent convertPersonToFormEvent(Person p) {
-		int ID = p.getID();
-		String name = p.getName();
-		String family = p.getFamily();
-		Role role = p.getRole();
-		String age = p.getAge();
-		String city = p.getCity();
-		String favSport = p.getFavoriteSport();
-		Gender gender = p.getGender();
-		String salary = p.getSalary();
-		Boolean isEmp = p.getIsEmp();
-		FormEvent e = new FormEvent(ID, name, family, gender, age, role, city,
-				favSport, isEmp, salary);
+		FormEvent e = new FormEvent(p.getID(), p.getName(), p.getFamily(),
+				p.getGender(), p.getAge(), p.getRole(), p.getCity(),
+				p.getFavoriteSport(), p.getIsEmp(), p.getSalary());
 		return e;
 	}
 
 	public Person ConvertFormEventToPerson(FormEvent e) {
-
-		int ID = e.getID();
-
-		String name = e.getName();
-		String family = e.getFamily();
-		Role role = e.getRole();
-		String age = e.getAge();
-		String city = e.getCity();
-		String favSport = e.getFavoriteSport();
-		Gender gender = e.getGender();
-		String salary = e.getSalary();
-		Boolean isEmp = e.getIsEmp();
-		Person person = new Person(ID, name, family, gender, age, role, city,
-				favSport, isEmp, salary);
+		Person person = new Person(e.getID(), e.getName(), e.getFamily(),
+				e.getGender(), e.getAge(), e.getRole(), e.getCity(),
+				e.getFavoriteSport(), e.getIsEmp(), e.getSalary());
 		return person;
 
 	}

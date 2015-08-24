@@ -2,6 +2,7 @@ package ir.mahan.train.model;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -15,20 +16,27 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Properties;
 
 public class DataBase {
 
 	private List<Person> people;
 	private Connection con;
 	private Statement statement = null;
+	ConfigGenerator configGenerator;
 
 	public DataBase() {
 		people = new ArrayList<>();
 	}
 
-	public void connect() throws ClassNotFoundException, SQLException {
+	public void connect() throws ClassNotFoundException, SQLException,
+			IOException {
 		Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
+		// String connectionURL =
+		// "jdbc:sqlserver://swsql.mahanair.aero;user=sa;password=123;database=javaTraining";
+		new ConfigGenerator().generateCongigFile();
+		String connectionURL = "jdbc:sqlserver://swsql.mahanair.aero"
+				+ configGenerator.ReadPropertiesFile();
 		con = DriverManager.getConnection(connectionURL);
 	}
 
@@ -48,20 +56,17 @@ public class DataBase {
 	// /---------------------- File -----------------------------------
 	public List<Person> loadFromFile(File file) throws IOException,
 			ClassNotFoundException {
-
-		FileInputStream fileStream = new FileInputStream(file);
-		ObjectInputStream os = new ObjectInputStream(fileStream);
-		Person[] persons = (Person[]) os.readObject();
+		ObjectInputStream os = new ObjectInputStream(new FileInputStream(file));
 		people.clear();
-		people.addAll(Arrays.asList(persons));
+		people.addAll(Arrays.asList((Person[]) os.readObject()));
 		people.toArray(new Person[people.size()]);
 		os.close();
 		return people;
 	}
 
 	public void saveToFile(File file) throws IOException {
-		FileOutputStream fileStream = new FileOutputStream(file);
-		ObjectOutputStream os = new ObjectOutputStream(fileStream);
+		ObjectOutputStream os = new ObjectOutputStream(new FileOutputStream(
+				file));
 		Person[] persons = people.toArray(new Person[people.size()]);
 		os.writeObject(persons);
 		os.close();
@@ -71,14 +76,11 @@ public class DataBase {
 	// /---------------------- DataBase -------------------------------
 	// /Right Click
 	public void deletePerson(int index) throws SQLException {
-		int id;
-		id = people.get(index).getID();
-		people.remove(index);
 		String removeQuery = "delete from G1.person where id=?";
 		PreparedStatement preparedStatement = con.prepareStatement(removeQuery);
-		preparedStatement.setInt(1, id);
+		preparedStatement.setInt(1, people.get(index).getID());
 		preparedStatement.executeUpdate();
-		;
+		people.remove(index);
 	}
 
 	// /Right Click

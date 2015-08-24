@@ -124,7 +124,7 @@ public class MainFrame extends JFrame {
 				try {
 					controller.deletePerson(row);
 				} catch (SQLException e) {
-					showStackTraceMessage(e);
+					System.out.println("tgdbh");
 				}
 				dbForm.remove(row);
 			}

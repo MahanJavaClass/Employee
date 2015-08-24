@@ -2,8 +2,11 @@ package ir.mahan.train.view;
 
 import ir.mahan.train.Controller.Controller;
 import ir.mahan.train.model.User;
+
 import javax.swing.*;
+
 import java.awt.*;
+import java.io.IOException;
 import java.sql.SQLException;
 
 public class LoginFrame extends JDialog {
@@ -83,7 +86,12 @@ public class LoginFrame extends JDialog {
 
 	private void connect() {
 		try {
-			controller.connect();
+			try {
+				controller.connect();
+			} catch (IOException e) {
+				JOptionPane.showMessageDialog(loginPanel, "Properties File Not Found", "خطا",
+						JOptionPane.ERROR_MESSAGE);
+			}
 			loginPanel.connectionMsgLabel.setText("Connected");
 
 		} catch (SQLException e) {
