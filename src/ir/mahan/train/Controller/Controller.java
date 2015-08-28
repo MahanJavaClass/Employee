@@ -2,11 +2,15 @@ package ir.mahan.train.Controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.NoSuchAlgorithmException;
+import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+
 import ir.mahan.train.model.DataBase;
 import ir.mahan.train.model.Gender;
+import ir.mahan.train.model.PasswordHash;
 import ir.mahan.train.model.Person;
 import ir.mahan.train.model.Role;
 import ir.mahan.train.view.FormEvent;
@@ -97,9 +101,9 @@ public class Controller {
 	// / ---------------------- authenticate -----------------------
 
 	public Boolean authenticate(String userName, String passString)
-			throws SQLException {
-		Boolean success = false;
-		success = db.authenticate(userName, passString);
+			throws SQLException, NoSuchAlgorithmException, InvalidKeySpecException {
+		String correctHash = db.authenticate(userName);
+		boolean success = PasswordHash.validatePassword(passString, correctHash);
 		if (success)
 			return true;
 		else

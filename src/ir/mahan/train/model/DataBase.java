@@ -182,18 +182,18 @@ public class DataBase {
 			return Gender.Male;
 	}
 
-	public boolean authenticate(String userName, String password)
+	public String authenticate(String userName)
 			throws SQLException {
 
-		String query = "select username from [User] where username=? and password=?";
+		String query = "select password from [User] where username=?";
 		PreparedStatement checkstm = con.prepareStatement(query);
 		checkstm.setString(1, userName);
-		checkstm.setString(2, password);
 		ResultSet rs = checkstm.executeQuery();
+		String correctHash = rs.getString("password");
 		if (rs.next()) {
-			return true;
+			return correctHash;
 		} else {
-			return false;
+			throw new SQLException("User or password incorrect");
 		}
 	}
 
