@@ -184,13 +184,14 @@ public class DataBase {
 
 	public String authenticate(String userName)
 			throws SQLException {
-
-		String query = "select password from [User] where username=?";
-		PreparedStatement checkstm = con.prepareStatement(query);
-		checkstm.setString(1, userName);
-		ResultSet rs = checkstm.executeQuery();
-		String correctHash = rs.getString("password");
-		if (rs.next()) {
+		String correctHash = null;
+		String query = "select * from [User] where username= '"+userName+"'";
+		Statement stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery(query);
+		while (rs.next()) {
+		 correctHash = rs.getString("password");
+		}
+		if (correctHash != null) {
 			return correctHash;
 		} else {
 			throw new SQLException("User or password incorrect");

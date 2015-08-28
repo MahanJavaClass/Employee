@@ -89,19 +89,19 @@ public class LoginFrame extends JDialog {
 			try {
 				controller.connect();
 			} catch (IOException e) {
-				JOptionPane.showMessageDialog(loginPanel, "Properties File Not Found", "Ø®Ø·Ø§",
+				JOptionPane.showMessageDialog(loginPanel, "Properties File Not Found", "خطا",
 						JOptionPane.ERROR_MESSAGE);
 			}
 			loginPanel.connectionMsgLabel.setText("Connected");
 
 		} catch (SQLException e) {
 
-			JOptionPane.showMessageDialog(loginPanel, e.getMessage(), "Ø®Ø·Ø§",
+			JOptionPane.showMessageDialog(loginPanel, e.getMessage(), "خطا",
 					JOptionPane.ERROR_MESSAGE);
 
 		} catch (ClassNotFoundException e) {
 
-			JOptionPane.showMessageDialog(loginPanel, e.getMessage(), "Ø®Ø·Ø§",
+			JOptionPane.showMessageDialog(loginPanel, e.getMessage(), "خطا",
 					JOptionPane.ERROR_MESSAGE);
 		}
 	}
